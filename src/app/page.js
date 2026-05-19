@@ -25,7 +25,7 @@ export default function Home() {
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            Réussir, c'est possible !
+            Réussir, c&apos;est possible !
           </div>
           <h1 className="text-3xl font-bold mb-2">
             Sujets BEPC & BAC<br/>
@@ -42,7 +42,7 @@ export default function Home() {
               Téléchargement instantané
             </div>
             <div className="flex items-center gap-1 text-xs">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 0">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               Corrections incluses
@@ -83,7 +83,7 @@ export default function Home() {
             { name: 'Mali', flag: '🇲🇱' },
             { name: 'Bénin', flag: '🇧🇯' },
           ].map((country) => (
-            <button key={country.name} className="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center gap-1 hover:bg-blue-50">
+            <button key={country.name} className="bg-white p-3 rounded-xl shadow-sm flex-col items-center gap-1 hover:bg-blue-50">
               <span className="text-2xl">{country.flag}</span>
               <span className="text-xs font-medium">{country.name}</span>
             </button>
@@ -103,57 +103,4 @@ export default function Home() {
             { exam: 'BEPC 2024', subject: 'Mathématiques', country: 'Cameroun', price: '200 CFA' },
             { exam: 'BAC 2024', subject: 'Philosophie', country: "Côte d'Ivoire", price: '200 CFA' },
             { exam: 'BEPC 2023', subject: 'Français', country: 'Sénégal', price: '200 CFA' },
-          ].map((item, i) => (
-            <div key={i} className="bg-white p-4 rounded-xl shadow-sm flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <span className="text-green-600 font-bold text-xs">PDF</span>
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs text-gray-500">{item.exam}</span>
-                </div>
-                <p className="font-semibold text-gray-800">{item.subject}</p>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <span>{item.country}</span>
-                  <span>•</span>
-                  <span>Avec correction</span>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="font-bold text-gray-800 mb-2">{item.price}</p>
-                <button className="bg-green-500 text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  Acheter 🛒
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mx-4 mb-24 bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl flex items-center gap-3">
-        <div className="text-3xl">🎓</div>
-        <div className="flex-1">
-          <p className="font-bold text-sm text-gray-800">Travaille aujourd'hui, réussis demain !</p>
-          <p className="text-xs text-gray-600">BacBepc.com t'accompagne vers la réussite.</p>
-        </div>
-      </div>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t max-w-md mx-auto">
-        <div className="flex justify-around py-2">
-          {[
-            { icon: '🏠', label: 'Accueil', active: true },
-            { icon: '📄', label: 'BEPC' },
-            { icon: '🎓', label: 'BAC' },
-            { icon: '🔍', label: 'Recherche' },
-            { icon: '👤', label: 'Compte' },
-          ].map((item) => (
-            <button key={item.label} className={`flex flex-col items-center gap-1 px-3 py-1 ${item.active ? 'text-blue-600' : 'text-gray-400'}`}>
-              <span className="text-xl">{item.icon}</span>
-              <span className="text-xs">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
-    </div>
-  )
-}
+          ].map
