@@ -1,7 +1,9 @@
+"use client";
+
 import Link from 'next/link';
 import { useState } from 'react';
 import { Poppins } from 'next/font/google';
-import { Moon, Sun, Globe, ChevronDown, Search, BookOpen, FileText, Users, Award } from 'lucide-react';
+import { Moon, Sun, Globe, Search, BookOpen, FileText, Users, Award } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 const poppins = Poppins({ 
