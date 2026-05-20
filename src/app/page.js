@@ -54,7 +54,7 @@ export default function Home() {
   const [lang, setLang] = useState("fr")
   const [country, setCountry] = useState(null)
   const [showCountryModal, setShowCountryModal] = useState(false)
-  const t = translations[lang]
+  const t = translations
 
   useEffect(() => {
     const savedLang = localStorage.getItem("bacbepc-lang")
@@ -82,7 +82,7 @@ export default function Home() {
         <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
           <span style={{fontSize: "24px", color: "#1e40af"}}>📘</span>
           <div>
-            <span style={{fontWeight: "800", fontSize: "18px", color: "#1e40af"}}>BacBepc</span>
+            <span style={{fontWeight: "700", fontSize: "18px", color: "#1e40af"}}>BacBepc</span>
             <span style={{fontSize: "18px", fontWeight: "400", color: "#64748b"}}>.com</span>
             <div style={{fontSize: "10px", color: "#64748b"}}>{t.tagline}</div>
           </div>
@@ -95,7 +95,7 @@ export default function Home() {
               border: "none",
               padding: "6px 12px",
               borderRadius: "16px",
-              fontWeight: "700",
+              fontWeight: "600",
               cursor: "pointer",
               fontSize: "12px",
               color: "#1e40af"
@@ -119,7 +119,7 @@ export default function Home() {
               padding: "10px 16px",
               borderRadius: "20px",
               fontSize: "13px",
-              fontWeight: "700",
+              fontWeight: "600",
               cursor: "pointer",
               marginBottom: "16px",
               display: "inline-flex",
@@ -127,16 +127,16 @@ export default function Home() {
               gap: "6px"
             }}
           >
-            {country? `${country.flag} ${country.name[lang]}` : t.selectCountry}
+            {country? `${country.flag} ${country.name}` : t.selectCountry}
           </button>
 
           {country && (
             <div style={{fontSize: "12px", color: "#64748b", marginBottom: "8px"}}>
-              {t.showing}: <strong>{country.name[lang]}</strong>
+              {t.showing}: <strong>{country.name}</strong>
             </div>
           )}
 
-          <h1 style={{fontSize: "42px", fontWeight: "800", lineHeight: "1.2", margin: "0 0 16px 0"}}>
+          <h1 style={{fontSize: "36px", fontWeight: "700", lineHeight: "1.2", margin: "0 0 16px 0"}}>
             {t.heroTitle1}<br/>
             <span style={{color: "#f97316"}}>{t.heroTitle2}</span><br/>
             {t.heroTitle3}<br/>{t.heroTitle4}
@@ -152,7 +152,7 @@ export default function Home() {
               padding: "14px 28px",
               borderRadius: "8px",
               fontSize: "15px",
-              fontWeight: "700",
+              fontWeight: "600",
               cursor: "pointer"
             }}>
               {t.teacherBtn}
@@ -164,7 +164,7 @@ export default function Home() {
               padding: "14px 28px",
               borderRadius: "8px",
               fontSize: "15px",
-              fontWeight: "700",
+              fontWeight: "600",
               cursor: "pointer"
             }}>
               {t.studentBtn}
@@ -199,42 +199,43 @@ export default function Home() {
             onClick={(e) => e.stopPropagation()}
             style={{
               backgroundColor: "white",
-              borderRadius: "20px",
-              padding: "24px",
+              borderRadius: "16px",
+              padding: "20px",
               maxWidth: "500px",
               width: "100%",
               maxHeight: "80vh",
               overflowY: "auto"
             }}
           >
-            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
-              <h3 style={{fontSize: "20px", fontWeight: "800", margin: 0}}>{t.selectCountry}</h3>
+            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px"}}>
+              <h3 style={{fontSize: "18px", fontWeight: "600", margin: 0}}>{t.selectCountry}</h3>
               <button
                 onClick={() => setShowCountryModal(false)}
-                style={{background: "none", border: "none", fontSize: "24px", cursor: "pointer"}}
+                style={{background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#64748b"}}
               >×</button>
             </div>
-            <div style={{display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px"}}>
+            <div style={{display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px"}}>
               {countries.map((c) => (
                 <button
                   key={c.code}
                   onClick={() => selectCountry(c)}
                   style={{
-                    backgroundColor: country?.code === c.code? "#dbeafe" : "#f8fafc",
-                    border: country?.code === c.code? "2px solid #1e40af" : "2px solid #e2e8f0",
-                    padding: "14px 16px",
-                    borderRadius: "12px",
+                    backgroundColor: country?.code === c.code? "#dbeafe" : "white",
+                    border: country?.code === c.code? "1px solid #1e40af" : "1px solid #e2e8f0",
+                    padding: "12px 14px",
+                    borderRadius: "10px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
-                    fontSize: "15px",
-                    fontWeight: "600",
+                    gap: "8px",
+                    fontSize: "14px",
+                    fontWeight: "500",
                     cursor: "pointer",
-                    textAlign: "left"
+                    textAlign: "left",
+                    color: "#0f172a"
                   }}
                 >
-                  <span style={{fontSize: "24px"}}>{c.flag}</span>
-                  <span>{c.name[lang]}</span>
+                  <span style={{fontSize: "22px"}}>{c.flag}</span>
+                  <span>{c.name}</span>
                 </button>
               ))}
             </div>
