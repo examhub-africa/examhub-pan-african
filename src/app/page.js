@@ -4,27 +4,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Poppins } from 'next/font/google';
 import { Moon, Sun, Globe, Search, BookOpen, FileText, Users, Award } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 
 const poppins = Poppins({ 
   subsets: ['latin'],
   weight: ['400', '500', '600', '700']
 });
 
-type Country = {
-  name: string;
-  code: string;
-  flag: string;
-  exam: string;
-};
-
-type Subject = {
-  name: string;
-  icon: LucideIcon;
-  color: string;
-};
-
-const countries: Country[] = [
+const countries = [
   { name: 'Benin Republic', code: 'BJ', flag: '🇧🇯', exam: 'Bac/BEPC' },
   { name: 'Nigeria', code: 'NG', flag: '🇳🇬', exam: 'WAEC/NECO/JAMB' },
   { name: 'Ghana', code: 'GH', flag: '🇬🇭', exam: 'WASSCE/BECE' },
@@ -35,7 +21,7 @@ const countries: Country[] = [
   { name: 'South Africa', code: 'ZA', flag: '🇿🇦', exam: 'NSC' },
 ];
 
-const subjects: Subject[] = [
+const subjects = [
   { name: 'Mathematics', icon: BookOpen, color: 'bg-blue-500' },
   { name: 'Physics', icon: Award, color: 'bg-purple-500' },
   { name: 'Chemistry', icon: FileText, color: 'bg-green-500' },
@@ -46,7 +32,7 @@ const subjects: Subject[] = [
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [lang, setLang] = useState('EN');
 
@@ -100,7 +86,6 @@ export default function Home() {
             Past questions, class notes, and assessments for Bac, BEPC, WAEC & more
           </p>
           
-          {/* Student Search Teacher/School */}
           <div className="max-w-2xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -159,7 +144,6 @@ export default function Home() {
         )}
       </section>
 
-      {/* Footer */}
       <footer className={`${theme.card} border-t ${theme.border} mt-20`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
           <p className={theme.textMuted}>© 2026 BacBepc. Empowering African Students.</p>
