@@ -40,7 +40,7 @@ const translations = {
 
 export default function Home() {
   const [lang, setLang] = useState("fr")
-  const t = translations[lang]
+  const t = translations
 
   const countries = [
     {flag: "🇨🇲", name: lang === "fr"? "Cameroun" : "Cameroon"},
@@ -73,12 +73,12 @@ export default function Home() {
     <div style={{fontFamily: "system-ui, -apple-system, sans-serif", backgroundColor: "#f5f7fa", minHeight: "100vh", paddingBottom: "70px"}}>
 
       {/* Header */}
-      <header style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px", backgroundColor: "white", boxShadow: "0 1px 3px rgba(0,0,0,0.08)"}}>
+      <header style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", backgroundColor: "white"}}>
         <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-          <img src="/logo.png" alt="BacBepc" style={{width: "28px", height: "28px", borderRadius: "6px"}} onError={(e)=>e.target.style.display='none'} />
+          <img src="/logo.png" alt="BacBepc" style={{width: "26px", height: "26px", borderRadius: "6px"}} onError={(e)=>e.target.style.display='none'} />
           <div>
-            <span style={{fontWeight: "800", fontSize: "18px", color: "#1e40af"}}>BacBepc</span>
-            <span style={{fontSize: "14px", color: "#64748b"}}>.com</span>
+            <span style={{fontWeight: "700", fontSize: "17px", color: "#1e40af"}}>BacBepc</span>
+            <span style={{fontSize: "14px", color: "#64748b", fontWeight: "400"}}>.com</span>
           </div>
         </div>
         <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
@@ -87,79 +87,104 @@ export default function Home() {
             style={{
               backgroundColor: "#f1f5f9",
               border: "none",
-              padding: "6px 12px",
-              borderRadius: "20px",
-              fontWeight: "700",
+              padding: "5px 10px",
+              borderRadius: "16px",
+              fontWeight: "600",
               cursor: "pointer",
-              fontSize: "13px",
+              fontSize: "12px",
               color: "#1e293b"
             }}
           >
             {lang === "fr"? "🇬🇧 EN" : "🇫🇷 FR"}
           </button>
-          <div style={{fontSize: "22px", cursor: "pointer", color: "#475569"}}>☰</div>
+          <div style={{fontSize: "20px", cursor: "pointer", color: "#475569"}}>☰</div>
         </div>
       </header>
 
-      {/* Hero Banner */}
+      {/* Hero Banner with Student Photo */}
       <section style={{
         background: "linear-gradient(135deg, #1e40af 0%, #2563eb 100%)",
         color: "white",
         margin: "12px",
         borderRadius: "20px",
-        padding: "24px 20px",
-        position: "relative"
+        padding: "20px",
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "260px"
       }}>
-        <span style={{backgroundColor: "#10b981", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "4px"}}>
-          🛡️ {t.badge}
-        </span>
+        <div style={{position: "relative", zIndex: 2, maxWidth: "60%"}}>
+          <span style={{backgroundColor: "#10b981", padding: "5px 10px", borderRadius: "16px", fontSize: "11px", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px"}}>
+            🛡️ {t.badge}
+          </span>
 
-        <h1 style={{fontSize: "30px", fontWeight: "900", margin: "16px 0 10px 0", lineHeight: "1.2"}}>
-          {t.title1}<br/>
-          <span style={{color: "#4ade80"}}>{t.price}</span>
-        </h1>
+          <h1 style={{fontSize: "24px", fontWeight: "700", margin: "14px 0 8px 0", lineHeight: "1.3"}}>
+            {t.title1}<br/>
+            <span style={{color: "#4ade80", fontWeight: "700"}}>{t.price}</span>
+          </h1>
 
-        <p style={{fontSize: "15px", opacity: 0.95, marginBottom: "20px", lineHeight: "1.5"}}>{t.desc}</p>
+          <p style={{fontSize: "13px", opacity: 0.95, marginBottom: "16px", lineHeight: "1.5", fontWeight: "400"}}>{t.desc}</p>
 
-        <div style={{display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px", fontSize: "13px", fontWeight: "500"}}>
-          <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-            <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "6px", borderRadius: "8px"}}>⬇️</span>
-            <span>{t.instant}</span>
+          <div style={{display: "flex", gap: "16px", marginBottom: "14px", fontSize: "12px", fontWeight: "500"}}>
+            <div style={{display: "flex", alignItems: "center", gap: "6px"}}>
+              <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "5px", borderRadius: "6px", fontSize: "12px"}}>⬇️</span>
+              <span>{t.instant}</span>
+            </div>
+            <div style={{display: "flex", alignItems: "center", gap: "6px"}}>
+              <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "5px", borderRadius: "6px", fontSize: "12px"}}>✓</span>
+              <span>{t.corrections}</span>
+            </div>
           </div>
-          <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-            <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "6px", borderRadius: "8px"}}>✓</span>
-            <span>{t.corrections}</span>
+
+          <div style={{display: "flex", alignItems: "center", gap: "10px", backgroundColor: "rgba(255,255,255,0.15)", padding: "10px 12px", borderRadius: "10px", fontSize: "11px", fontWeight: "500"}}>
+            <span style={{backgroundColor: "white", color: "#1e40af", padding: "3px 5px", borderRadius: "5px", fontSize: "12px"}}>🔒</span>
+            <span style={{flex: 1}}>{t.payment}</span>
+            <div style={{display: "flex", gap: "4px", fontSize: "9px", fontWeight: "700"}}>
+              <span style={{backgroundColor: "white", color: "#1e40af", padding: "2px 4px", borderRadius: "3px"}}>Paystack</span>
+              <span style={{backgroundColor: "yellow", color: "#000", padding: "2px 4px", borderRadius: "3px"}}>MTN</span>
+              <span style={{backgroundColor: "orange", color: "white", padding: "2px 4px", borderRadius: "3px"}}>Orange</span>
+            </div>
           </div>
         </div>
 
-        <div style={{display: "flex", alignItems: "center", gap: "10px", backgroundColor: "rgba(255,255,255,0.15)", padding: "12px 14px", borderRadius: "12px", fontSize: "12px", fontWeight: "600"}}>
-          <span style={{backgroundColor: "white", color: "#1e40af", padding: "4px 6px", borderRadius: "6px", fontSize: "14px"}}>🔒</span>
-          <span>{t.payment}</span>
-        </div>
+        {/* Student Photo - Right side like your design */}
+        <img
+          src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400"
+          alt="Student"
+          style={{
+            position: "absolute",
+            right: "0",
+            bottom: "0",
+            width: "45%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "right",
+            zIndex: 1
+          }}
+        />
       </section>
 
       {/* Choose Country */}
       <section style={{padding: "0 16px", marginTop: "20px"}}>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px"}}>
-          <h2 style={{fontSize: "17px", fontWeight: "800"}}>{t.chooseCountry}</h2>
-          <span style={{color: "#2563eb", fontSize: "14px", fontWeight: "700"}}>{t.seeAll}</span>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px"}}>
+          <h2 style={{fontSize: "16px", fontWeight: "700"}}>{t.chooseCountry}</h2>
+          <span style={{color: "#2563eb", fontSize: "13px", fontWeight: "600"}}>{t.seeAll}</span>
         </div>
 
         <div style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px"}}>
           {countries.map((c, i) => (
             <div key={i} style={{
               backgroundColor: "white",
-              padding: "14px 10px",
-              borderRadius: "14px",
+              padding: "12px 8px",
+              borderRadius: "12px",
               display: "flex",
               alignItems: "center",
-              gap: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+              gap: "6px",
+              fontSize: "13px",
+              fontWeight: "500",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
               cursor: "pointer"
             }}>
-              <span style={{fontSize: "22px"}}>{c.flag}</span>
+              <span style={{fontSize: "20px"}}>{c.flag}</span>
               <span>{c.name}</span>
             </div>
           ))}
@@ -167,50 +192,50 @@ export default function Home() {
       </section>
 
       {/* Popular Subjects */}
-      <section style={{padding: "0 16px", marginTop: "24px"}}>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px"}}>
-          <h2 style={{fontSize: "17px", fontWeight: "800", display: "flex", alignItems: "center", gap: "6px"}}>
+      <section style={{padding: "0 16px", marginTop: "22px"}}>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px"}}>
+          <h2 style={{fontSize: "16px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px"}}>
             🔥 {t.popular}
           </h2>
-          <span style={{color: "#2563eb", fontSize: "14px", fontWeight: "700"}}>{t.seeAll}</span>
+          <span style={{color: "#2563eb", fontSize: "13px", fontWeight: "600"}}>{t.seeAll}</span>
         </div>
 
         {sujets.map((s, i) => (
           <div key={i} style={{
             backgroundColor: "white",
-            padding: "16px",
-            borderRadius: "16px",
-            marginBottom: "12px",
+            padding: "14px",
+            borderRadius: "14px",
+            marginBottom: "10px",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
+            gap: "10px",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.06)"
           }}>
-            <div style={{backgroundColor: "#dbeafe", padding: "10px 8px", borderRadius: "10px", fontSize: "11px", fontWeight: "800", color: "#1e40af", minWidth: "40px", textAlign: "center"}}>
+            <div style={{backgroundColor: "#dbeafe", padding: "8px 6px", borderRadius: "8px", fontSize: "10px", fontWeight: "700", color: "#1e40af", minWidth: "36px", textAlign: "center"}}>
               PDF
             </div>
             <div style={{flex: 1}}>
-              <p style={{fontSize: "12px", color: "#64748b", margin: 0, fontWeight: "500"}}>{s.year}</p>
-              <p style={{fontWeight: "800", margin: "4px 0", fontSize: "16px"}}>{s.subject}</p>
-              <div style={{display: "flex", gap: "14px", fontSize: "12px", color: "#64748b", alignItems: "center"}}>
-                <span style={{display: "flex", alignItems: "center", gap: "4px"}}>📍 {s.country}</span>
-                <span style={{display: "flex", alignItems: "center", gap: "4px", color: "#10b981", fontWeight: "600"}}>✓ {t.correction}</span>
+              <p style={{fontSize: "11px", color: "#64748b", margin: 0, fontWeight: "500"}}>{s.year}</p>
+              <p style={{fontWeight: "700", margin: "3px 0", fontSize: "15px"}}>{s.subject}</p>
+              <div style={{display: "flex", gap: "12px", fontSize: "11px", color: "#64748b", alignItems: "center"}}>
+                <span style={{display: "flex", alignItems: "center", gap: "3px"}}>📍 {s.country}</span>
+                <span style={{display: "flex", alignItems: "center", gap: "3px", color: "#10b981", fontWeight: "600"}}>✓ {t.correction}</span>
               </div>
             </div>
             <div style={{textAlign: "right"}}>
-              <p style={{fontWeight: "800", margin: "0 0 8px 0", fontSize: "15px"}}>200 CFA</p>
+              <p style={{fontWeight: "700", margin: "0 0 6px 0", fontSize: "14px"}}>200 CFA</p>
               <button style={{
                 backgroundColor: "#10b981",
                 color: "white",
                 border: "none",
-                padding: "10px 18px",
-                borderRadius: "10px",
-                fontSize: "14px",
-                fontWeight: "700",
+                padding: "8px 14px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: "600",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                gap: "6px"
+                gap: "4px"
               }}>
                 {t.buy} 🛒
               </button>
@@ -220,16 +245,16 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section style={{margin: "24px 16px", backgroundColor: "white", padding: "20px", borderRadius: "18px", display: "flex", alignItems: "center", gap: "16px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)"}}>
-        <div style={{fontSize: "42px"}}>📚</div>
+      <section style={{margin: "22px 16px", backgroundColor: "white", padding: "16px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "12px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)"}}>
+        <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" style={{width: "40px", height: "40px"}} alt="books"/>
         <div style={{flex: 1}}>
-          <p style={{fontWeight: "800", margin: 0, fontSize: "15px"}}>{t.cta1}</p>
-          <p style={{fontSize: "13px", color: "#64748b", margin: "4px 0 0 0"}}>{t.cta2}</p>
+          <p style={{fontWeight: "700", margin: 0, fontSize: "14px"}}>{t.cta1}</p>
+          <p style={{fontSize: "12px", color: "#64748b", margin: "3px 0 0 0", fontWeight: "400"}}>{t.cta2}</p>
         </div>
-        <div style={{fontSize: "32px"}}>🎯</div>
+        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055646.png" style={{width: "32px", height: "32px"}} alt="target"/>
       </section>
 
-      {/* Bottom Nav - 5 items like your design */}
+      {/* Bottom Nav - 5 items exact like your design */}
       <nav style={{
         position: "fixed",
         bottom: 0,
@@ -239,21 +264,21 @@ export default function Home() {
         borderTop: "1px solid #e2e8f0",
         display: "flex",
         justifyContent: "space-around",
-        padding: "8px 0",
-        boxShadow: "0 -2px 10px rgba(0,0,0,0.08)"
+        padding: "6px 0",
+        boxShadow: "0 -2px 8px rgba(0,0,0,0.06)"
       }}>
         {t.nav.map((label, i) => (
           <div key={i} style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "3px",
+            gap: "2px",
             color: i === 0? "#10b981" : "#94a3b8",
-            fontSize: "11px",
-            fontWeight: i === 0? "700" : "500",
+            fontSize: "10px",
+            fontWeight: i === 0? "600" : "500",
             cursor: "pointer"
           }}>
-            <span style={{fontSize: "22px"}}>{["🏠","📄","🎓","🔍","👤"][i]}</span>
+            <span style={{fontSize: "20px"}}>{["🏠","📄","🎓","🔍","👤"][i]}</span>
             <span>{label}</span>
           </div>
         ))}
