@@ -41,6 +41,8 @@ const translations = {
 const countries = [
   {code: "CM", flag: "🇨🇲", name: {fr: "Cameroun", en: "Cameroon"}},
   {code: "NG", flag: "🇳🇬", name: {fr: "Nigéria", en: "Nigeria"}},
+  {code: "BJ", flag: "🇧🇯", name: {fr: "Bénin", en: "Benin Republic"}},
+  {code: "TG", flag: "🇹🇬", name: {fr: "Togo", en: "Togo"}},
   {code: "CI", flag: "🇨🇮", name: {fr: "Côte d'Ivoire", en: "Ivory Coast"}},
   {code: "SN", flag: "🇸🇳", name: {fr: "Sénégal", en: "Senegal"}},
   {code: "GH", flag: "🇬🇭", name: {fr: "Ghana", en: "Ghana"}},
@@ -125,12 +127,12 @@ export default function Home() {
               gap: "6px"
             }}
           >
-            {country? `${country.flag} ${country.name}` : t.selectCountry}
+            {country? `${country.flag} ${country.name[lang]}` : t.selectCountry}
           </button>
 
           {country && (
             <div style={{fontSize: "12px", color: "#64748b", marginBottom: "8px"}}>
-              {t.showing}: <strong>{country.name}</strong>
+              {t.showing}: <strong>{country.name[lang]}</strong>
             </div>
           )}
 
@@ -232,7 +234,7 @@ export default function Home() {
                   }}
                 >
                   <span style={{fontSize: "24px"}}>{c.flag}</span>
-                  <span>{c.name}</span>
+                  <span>{c.name[lang]}</span>
                 </button>
               ))}
             </div>
