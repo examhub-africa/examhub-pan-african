@@ -10,6 +10,9 @@ const translations = {
     heroTitle4: "à travers l'Afrique.",
     heroSubtitle: "Téléchargez une fois. Gagnez chaque mois. Gardez 60%.",
     selectCountry: "🌍 Choisir votre pays",
+    changeCountry: "🌍 Changer de pays",
+    showing: "Affichage pour",
+    close: "Fermer",
     teacherBtn: "👨‍🏫 Je suis enseignant",
     studentBtn: "🎓 Je suis étudiant",
     secure: "🔒 Paiements sécurisés par Paystack",
@@ -24,6 +27,9 @@ const translations = {
     heroTitle4: "Across Africa.",
     heroSubtitle: "Upload once. Earn monthly. Keep 60%.",
     selectCountry: "🌍 Select your country",
+    changeCountry: "🌍 Change country",
+    showing: "Showing for",
+    close: "Close",
     teacherBtn: "👨‍🏫 I'm a Teacher",
     studentBtn: "🎓 I'm a Student",
     secure: "🔒 Secure Payments by Paystack",
@@ -36,23 +42,35 @@ const countries = [
   {code: "CM", flag: "🇨🇲", name: {fr: "Cameroun", en: "Cameroon"}},
   {code: "NG", flag: "🇳🇬", name: {fr: "Nigéria", en: "Nigeria"}},
   {code: "CI", flag: "🇨🇮", name: {fr: "Côte d'Ivoire", en: "Ivory Coast"}},
+  {code: "SN", flag: "🇸🇳", name: {fr: "Sénégal", en: "Senegal"}},
+  {code: "GH", flag: "🇬🇭", name: {fr: "Ghana", en: "Ghana"}},
+  {code: "KE", flag: "🇰🇪", name: {fr: "Kenya", en: "Kenya"}},
   {code: "ALL", flag: "🌍", name: {fr: "Toute l'Afrique", en: "All Africa"}}
 ]
 
 export default function Home() {
   const [lang, setLang] = useState("fr")
   const [country, setCountry] = useState(null)
+  const [showCountryModal, setShowCountryModal] = useState(false)
   const t = translations[lang]
 
   useEffect(() => {
     const savedLang = localStorage.getItem("bacbepc-lang")
+    const savedCountry = localStorage.getItem("bacbepc-country")
     if (savedLang) setLang(savedLang)
+    if (savedCountry) setCountry(JSON.parse(savedCountry))
   }, [])
 
   const toggleLang = () => {
     const newLang = lang === "fr"? "en" : "fr"
     setLang(newLang)
     localStorage.setItem("bacbepc-lang", newLang)
+  }
+
+  const selectCountry = (c) => {
+    setCountry(c)
+    localStorage.setItem("bacbepc-country", JSON.stringify(c))
+    setShowCountryModal(false)
   }
 
   return (
@@ -91,6 +109,7 @@ export default function Home() {
         <div style={{maxWidth: "1200px", margin: "0 auto", textAlign: "center"}}>
 
           <button
+            onClick={() => setShowCountryModal(true)}
             style={{
               backgroundColor: "#dbeafe",
               color: "#1e40af",
@@ -106,8 +125,14 @@ export default function Home() {
               gap: "6px"
             }}
           >
-            {country? `${country.flag} ${country.name[lang]}` : t.selectCountry}
+            {country? `${country.flag} ${country.name}` : t.selectCountry}
           </button>
+
+          {country && (
+            <div style={{fontSize: "12px", color: "#64748b", marginBottom: "8px"}}>
+              {t.showing}: <strong>{country.name}</strong>
+            </div>
+          )}
 
           <h1 style={{fontSize: "42px", fontWeight: "800", lineHeight: "1.2", margin: "0 0 16px 0"}}>
             {t.heroTitle1}<br/>
@@ -150,6 +175,70 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {showCountryModal && (
+        <div
+          onClick={() => setShowCountryModal(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            padding: "20px"
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: "white",
+              borderRadius: "20px",
+              padding: "24px",
+              maxWidth: "500px",
+              width: "100%",
+              maxHeight: "80vh",
+              overflowY: "auto"
+            }}
+          >
+            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
+              <h3 style={{fontSize: "20px", fontWeight: "800", margin: 0}}>{t.selectCountry}</h3>
+              <button
+                onClick={() => setShowCountryModal(false)}
+                style={{background: "none", border: "none", fontSize: "24px", cursor: "pointer"}}
+              >×</button>
+            </div>
+            <div style={{display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px"}}>
+              {countries.map((c) => (
+                <button
+                  key={c.code}
+                  onClick={() => selectCountry(c)}
+                  style={{
+                    backgroundColor: country?.code === c.code? "#dbeafe" : "#f8fafc",
+                    border: country?.code === c.code? "2px solid #1e40af" : "2px solid #e2e8f0",
+                    padding: "14px 16px",
+                    borderRadius: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    textAlign: "left"
+                  }}
+                >
+                  <span style={{fontSize: "24px"}}>{c.flag}</span>
+                  <span>{c.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )
