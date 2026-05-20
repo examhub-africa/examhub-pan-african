@@ -1,164 +1,168 @@
-"use client";
+import Link from 'next/link';
+import { useState } from 'react';
+import { Poppins } from 'next/font/google';
+import { Moon, Sun, Globe, ChevronDown, Search, BookOpen, FileText, Users, Award } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-import { useState } from "react";
-import {
-  Search, Globe, BookOpen, GraduationCap, Download, 
-  Moon, Sun, Bell, Trophy, Check, ChevronDown, Menu,
-} from "lucide-react";
+const poppins = Poppins({ 
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700']
+});
 
-const translations = {
-  EN: {
-    tagline: "Past Questions for BEPC & Baccalaureate",
-    teacherLogin: "Teacher Login",
-    studentLogin: "Student Login",
-    selectCountry: "Select Your Country",
-    searchSubjects: "Search subjects...",
-    premium: "Premium Access",
-    subscribe: "Subscribe Now",
-    pastQuestions: "Past Questions",
-    howItWorks: "How it Works",
-    updates: "Latest Updates",
-    topStudents: "Top Students",
-    offline: "Download for Offline",
-    free: "Free",
-    monthly: "Monthly",
-    yearly: "Yearly",
-    about: "About",
-    contact: "Contact",
-    privacy: "Privacy Policy",
-    terms: "Terms",
-    support: "Support",
-  },
-  FR: {
-    tagline: "Épreuves du BEPC & Baccalauréat",
-    teacherLogin: "Connexion Enseignant",
-    studentLogin: "Connexion Élève",
-    selectCountry: "Sélectionnez votre pays",
-    searchSubjects: "Rechercher une matière...",
-    premium: "Accès Premium",
-    subscribe: "S'abonner",
-    pastQuestions: "Épreuves Antérieures",
-    howItWorks: "Comment ça marche",
-    updates: "Nouvelles",
-    topStudents: "Meilleurs Élèves",
-    offline: "Télécharger hors ligne",
-    free: "Gratuit",
-    monthly: "Mensuel",
-    yearly: "Annuel",
-    about: "À propos",
-    contact: "Contact",
-    privacy: "Confidentialité",
-    terms: "Conditions",
-    support: "Support",
-  },
+type Country = {
+  name: string;
+  code: string;
+  flag: string;
+  exam: string;
 };
 
-const countries = [
-  { name: "Benin Republic", flag: "🇧🇯" },
-  { name: "Cameroon", flag: "🇨🇲" },
-  { name: "Ghana", flag: "🇬🇭" },
-  { name: "Gabon", flag: "🇬🇦" },
-  { name: "Ivory Coast", flag: "🇨🇮" },
-  { name: "Nigeria", flag: "🇳🇬" },
-  { name: "Senegal", flag: "🇸🇳" },
-  { name: "Togo", flag: "🇹🇬" },
+type Subject = {
+  name: string;
+  icon: LucideIcon;
+  color: string;
+};
+
+const countries: Country[] = [
+  { name: 'Benin Republic', code: 'BJ', flag: '🇧🇯', exam: 'Bac/BEPC' },
+  { name: 'Nigeria', code: 'NG', flag: '🇳🇬', exam: 'WAEC/NECO/JAMB' },
+  { name: 'Ghana', code: 'GH', flag: '🇬🇭', exam: 'WASSCE/BECE' },
+  { name: 'Senegal', code: 'SN', flag: '🇸🇳', exam: 'Bac/BFEM' },
+  { name: 'Ivory Coast', code: 'CI', flag: '🇨🇮', exam: 'Bac/BEPC' },
+  { name: 'Cameroon', code: 'CM', flag: '🇨🇲', exam: 'GCE/Bac' },
+  { name: 'Kenya', code: 'KE', flag: '🇰🇪', exam: 'KCSE/KCPE' },
+  { name: 'South Africa', code: 'ZA', flag: '🇿🇦', exam: 'NSC' },
 ];
 
-const subjects = [
-  { icon: "📘", en: "Mathematics", fr: "Mathématiques", exam: "BEPC" },
-  { icon: "⚛️", en: "Physics", fr: "Physique", exam: "Baccalaureate C" },
-  { icon: "🧪", en: "Chemistry", fr: "Chimie", exam: "Baccalaureate D" },
-  { icon: "🧬", en: "Biology", fr: "Biologie", exam: "Baccalaureate D" },
-  { icon: "📖", en: "English", fr: "Anglais", exam: "BEPC" },
-  { icon: "📝", en: "French", fr: "Français", exam: "BEPC" },
-  { icon: "🏛️", en: "History", fr: "Histoire", exam: "Baccalaureate A" },
-  { icon: "🌍", en: "Geography", fr: "Géographie", exam: "Baccalaureate A" },
+const subjects: Subject[] = [
+  { name: 'Mathematics', icon: BookOpen, color: 'bg-blue-500' },
+  { name: 'Physics', icon: Award, color: 'bg-purple-500' },
+  { name: 'Chemistry', icon: FileText, color: 'bg-green-500' },
+  { name: 'Biology', icon: Users, color: 'bg-orange-500' },
+  { name: 'English', icon: BookOpen, color: 'bg-red-500' },
+  { name: 'French', icon: Globe, color: 'bg-indigo-500' },
 ];
 
-const plans = [
-  { name: "Free", price: "$0", features: ["Limited Questions", "Basic Access", "Ads Supported"] },
-  { name: "Monthly", price: "$4.99", features: ["Unlimited Questions", "Offline Downloads", "Leaderboard Access"] },
-  { name: "Yearly", price: "$39.99", features: ["Everything Included", "Priority Support", "Premium Mock Exams"] },
-];
-
-export default function BacBepcHomePage() {
-  const [lang, setLang] = useState("EN");
+export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
-  const t = translations[lang];
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [lang, setLang] = useState('EN');
+
+  const theme = {
+    bg: darkMode ? 'bg-gray-900' : 'bg-gray-50',
+    card: darkMode ? 'bg-gray-800' : 'bg-white',
+    text: darkMode ? 'text-gray-100' : 'text-gray-900',
+    textMuted: darkMode ? 'text-gray-400' : 'text-gray-600',
+    border: darkMode ? 'border-gray-700' : 'border-gray-200',
+  };
 
   return (
-    <div className={`min-h-screen transition-all duration-300 ${darkMode ? "bg-slate-950 text-white" : "bg-gradient-to-b from-blue-50 to-white text-slate-900"}`}>
-      
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-white/70 dark:bg-slate-900/70">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="BacBepc Logo" className="w-12 h-12 object-contain" />
-            <div>
-              <h1 className="font-bold text-xl text-blue-900 dark:text-white">BacBepc</h1>
-              <p className="text-xs text-slate-500">{t.tagline}</p>
+    <main className={`${poppins.className} min-h-screen ${theme.bg} ${theme.text}`}>
+      {/* Navbar */}
+      <nav className={`${theme.card} border-b ${theme.border} sticky top-0 z-50`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-8 h-8 text-blue-600" />
+              <span className="text-xl font-bold">BacBepc</span>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setLang(lang === 'EN' ? 'FR' : 'EN')}
+                className={`px-3 py-1 rounded-lg border ${theme.border} ${theme.textMuted} hover:bg-gray-100 dark:hover:bg-gray-700`}
+              >
+                {lang}
+              </button>
+              <button 
+                onClick={() => setDarkMode(!darkMode)}
+                className={`p-2 rounded-lg border ${theme.border} ${theme.textMuted} hover:bg-gray-100 dark:hover:bg-gray-700`}
+              >
+                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <Link href="/teacher/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Teacher Login
+              </Link>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setLang(lang === "EN" ? "FR" : "EN")} className="px-3 py-2 rounded-xl bg-white/20 backdrop-blur-lg border border-white/20 flex items-center gap-2">
-              <Globe size={16} /> {lang}
-            </button>
-            <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-xl bg-white/20 backdrop-blur-lg border border-white/20">
-              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-            <button className="md:hidden p-2 rounded-xl bg-blue-600 text-white"><Menu size={18} /></button>
+        </div>
+      </nav>
+
+      {/* Hero + Search */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Your Pan-African Exam Hub
+          </h1>
+          <p className={`text-lg ${theme.textMuted} mb-6`}>
+            Past questions, class notes, and assessments for Bac, BEPC, WAEC & more
+          </p>
+          
+          {/* Student Search Teacher/School */}
+          <div className="max-w-2xl mx-auto relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search your school or teacher..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full pl-12 pr-4 py-3 rounded-lg border-2 ${theme.border} ${theme.card} focus:border-blue-500 outline-none`}
+            />
           </div>
         </div>
-      </header>
 
-      {/* COUNTRY SELECTOR */}
-      <section className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold">{t.selectCountry}</h3>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl border">
-            All Countries <ChevronDown size={16} />
-          </button>
+        {/* Country Selector */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6">Select Your Country</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {countries.map((country) => (
+              <button
+                key={country.code}
+                onClick={() => setSelectedCountry(country)}
+                className={`p-6 rounded-xl border-2 transition-all hover:scale-105 ${
+                  selectedCountry?.code === country.code 
+                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' 
+                    : `${theme.border} ${theme.card} hover:border-blue-400`
+                }`}
+              >
+                <div className="text-4xl mb-2">{country.flag}</div>
+                <div className="font-semibold">{country.name}</div>
+                <div className={`text-sm ${theme.textMuted}`}>{country.exam}</div>
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          {countries.map((country) => (
-            <button key={country.name} className="group p-5 rounded-3xl bg-white/60 dark:bg-white/5 backdrop-blur-xl border-white/20 hover:scale-105 transition-all shadow-lg">
-              <div className="text-4xl mb-3">{country.flag}</div>
-              <p className="font-semibold text-sm">{country.name}</p>
-            </button>
-          ))}
-        </div>
-      </section>
 
-      {/* SUBJECTS */}
-      <section className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        {/* Subjects */}
+        {selectedCountry && (
           <div>
-            <h3 className="text-3xl font-bold mb-2">BEPC & Baccalaureate</h3>
-            <p className="text-slate-500">Practice with verified exam archives</p>
-          </div>
-          <div className="relative w-full md:w-96">
-            <Search className="absolute left-4 top-4 text-slate-400" size={18} />
-            <input type="text" placeholder={t.searchSubjects} className="w-full pl-12 pr-4 py-4 rounded-2xl border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl outline-none" />
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {subjects.map((subject, index) => (
-            <div key={index} className="group bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-3xl border-white/20 p-6 hover:-translate-y-1 transition-all shadow-lg">
-              <div className="text-5xl mb-5">{subject.icon}</div>
-              <div className="mb-3"><span className="text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700">{subject.exam}</span></div>
-              <h4 className="font-bold text-xl mb-2">{lang === "EN" ? subject.en : subject.fr}</h4>
-              <p className="text-slate-500 mb-6">{t.pastQuestions}</p>
-              <button className="w-full py-3 rounded-2xl bg-blue-700 text-white font-medium hover:bg-blue-800 transition">Open</button>
+            <h2 className="text-2xl font-semibold mb-6">
+              {selectedCountry.name} Subjects
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {subjects.map((subject) => (
+                <Link
+                  key={subject.name}
+                  href={`/subject/${subject.name.toLowerCase()}`}
+                  className={`${theme.card} p-6 rounded-xl border ${theme.border} hover:shadow-lg transition-all text-center`}
+                >
+                  <div className={`${subject.color} w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3`}>
+                    <subject.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="font-medium">{subject.name}</div>
+                </Link>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </section>
 
-      <footer className="mt-20 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 py-10 text-center text-slate-500">
-          © 2026 BacBepc. All rights reserved.
+      {/* Footer */}
+      <footer className={`${theme.card} border-t ${theme.border} mt-20`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+          <p className={theme.textMuted}>© 2026 BacBepc. Empowering African Students.</p>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
