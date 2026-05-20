@@ -14,7 +14,7 @@ const translations = {
     seeAll: "Voir tout >",
     popular: "Sujets populaires",
     correction: "Avec correction",
-    buy: "Acheter 🛒",
+    buy: "Acheter",
     cta1: "Travaille aujourd'hui, réussis demain!",
     cta2: "BacBepc.com t'accompagne vers la réussite.",
     nav: ["Accueil", "BEPC", "BAC", "Recherche", "Compte"]
@@ -31,7 +31,7 @@ const translations = {
     seeAll: "See all >",
     popular: "Popular subjects",
     correction: "With correction",
-    buy: "Buy 🛒",
+    buy: "Buy",
     cta1: "Work today, succeed tomorrow!",
     cta2: "BacBepc.com guides you to success.",
     nav: ["Home", "BEPC", "BAC", "Search", "Account"]
@@ -46,16 +46,16 @@ export default function Home() {
     {flag: "🇨🇲", name: lang === "fr"? "Cameroun" : "Cameroon"},
     {flag: "🇨🇮", name: lang === "fr"? "Côte d'Ivoire" : "Ivory Coast"},
     {flag: "🇸🇳", name: "Sénégal"},
-    {flag: "🇹🇬", name: lang === "fr"? "Togo" : "Togo"},
+    {flag: "🇹🇬", name: "Togo"},
     {flag: "🇲🇱", name: "Mali"},
     {flag: "🇧🇫", name: lang === "fr"? "Burkina Faso" : "Burkina Faso"},
     {flag: "🇧🇯", name: lang === "fr"? "Bénin" : "Benin"}
   ]
 
   const sujets = [
-    {year: lang === "fr"? "BEPC 2024" : "BEPC 2024", subject: lang === "fr"? "Mathématiques" : "Mathematics", country: lang === "fr"? "Cameroun" : "Cameroon", price: "200 CFA", correction: true},
-    {year: "BAC 2024", subject: lang === "fr"? "Philosophie" : "Philosophy", country: lang === "fr"? "Côte d'Ivoire" : "Ivory Coast", price: "200 CFA", correction: true},
-    {year: lang === "fr"? "BEPC 2023" : "BEPC 2023", subject: lang === "fr"? "Français" : "French", country: "Sénégal", price: "200 CFA", correction: true}
+    {year: "BEPC 2024", subject: lang === "fr"? "Mathématiques" : "Mathematics", country: lang === "fr"? "Cameroun" : "Cameroon"},
+    {year: "BAC 2024", subject: lang === "fr"? "Philosophie" : "Philosophy", country: lang === "fr"? "Côte d'Ivoire" : "Ivory Coast"},
+    {year: "BEPC 2023", subject: lang === "fr"? "Français" : "French", country: "Sénégal"}
   ]
 
   useEffect(() => {
@@ -70,18 +70,18 @@ export default function Home() {
   }
 
   return (
-    <div style={{fontFamily: "system-ui, sans-serif", backgroundColor: "#f5f7fa", minHeight: "100vh", paddingBottom: "70px"}}>
+    <div style={{fontFamily: "system-ui, -apple-system, sans-serif", backgroundColor: "#f5f7fa", minHeight: "100vh", paddingBottom: "70px"}}>
 
-      {/* Header with Lang Toggle */}
-      <header style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", backgroundColor: "white"}}>
+      {/* Header */}
+      <header style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px", backgroundColor: "white", boxShadow: "0 1px 3px rgba(0,0,0,0.08)"}}>
         <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-          <img src="/logo.png" alt="BacBepc" style={{width: "28px", height: "28px"}} />
+          <img src="/logo.png" alt="BacBepc" style={{width: "28px", height: "28px", borderRadius: "6px"}} onError={(e)=>e.target.style.display='none'} />
           <div>
-            <span style={{fontWeight: "700", fontSize: "18px", color: "#1e40af"}}>BacBepc</span>
+            <span style={{fontWeight: "800", fontSize: "18px", color: "#1e40af"}}>BacBepc</span>
             <span style={{fontSize: "14px", color: "#64748b"}}>.com</span>
           </div>
         </div>
-        <div style={{display: "flex", gap: "12px", alignItems: "center"}}>
+        <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
           <button
             onClick={toggleLang}
             style={{
@@ -89,76 +89,78 @@ export default function Home() {
               border: "none",
               padding: "6px 12px",
               borderRadius: "20px",
-              fontWeight: "600",
+              fontWeight: "700",
               cursor: "pointer",
-              fontSize: "14px"
+              fontSize: "13px",
+              color: "#1e293b"
             }}
           >
             {lang === "fr"? "🇬🇧 EN" : "🇫🇷 FR"}
           </button>
-          <div style={{fontSize: "24px", cursor: "pointer"}}>☰</div>
+          <div style={{fontSize: "22px", cursor: "pointer", color: "#475569"}}>☰</div>
         </div>
       </header>
 
       {/* Hero Banner */}
       <section style={{
-        background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
+        background: "linear-gradient(135deg, #1e40af 0%, #2563eb 100%)",
         color: "white",
         margin: "12px",
         borderRadius: "20px",
-        padding: "20px",
-        position: "relative",
-        overflow: "hidden"
+        padding: "24px 20px",
+        position: "relative"
       }}>
-        <span style={{backgroundColor: "#10b981", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "600"}}>
+        <span style={{backgroundColor: "#10b981", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "4px"}}>
           🛡️ {t.badge}
         </span>
 
-        <h1 style={{fontSize: "28px", fontWeight: "800", margin: "16px 0 8px 0", lineHeight: "1.2"}}>
+        <h1 style={{fontSize: "30px", fontWeight: "900", margin: "16px 0 10px 0", lineHeight: "1.2"}}>
           {t.title1}<br/>
           <span style={{color: "#4ade80"}}>{t.price}</span>
         </h1>
 
-        <p style={{fontSize: "14px", opacity: 0.9, marginBottom: "20px"}}>{t.desc}</p>
+        <p style={{fontSize: "15px", opacity: 0.95, marginBottom: "20px", lineHeight: "1.5"}}>{t.desc}</p>
 
-        <div style={{display: "flex", gap: "16px", marginBottom: "20px", fontSize: "12px", flexWrap: "wrap"}}>
-          <div style={{display: "flex", alignItems: "center", gap: "6px"}}>
+        <div style={{display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px", fontSize: "13px", fontWeight: "500"}}>
+          <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
             <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "6px", borderRadius: "8px"}}>⬇️</span>
             <span>{t.instant}</span>
           </div>
-          <div style={{display: "flex", alignItems: "center", gap: "6px"}}>
+          <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
             <span style={{backgroundColor: "rgba(255,255,255,0.2)", padding: "6px", borderRadius: "8px"}}>✓</span>
             <span>{t.corrections}</span>
           </div>
         </div>
 
-        <div style={{display: "flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,255,255,0.15)", padding: "12px", borderRadius: "12px", fontSize: "12px"}}>
-          <span style={{backgroundColor: "white", color: "#1e40af", padding: "4px 6px", borderRadius: "6px"}}>🔒</span>
+        <div style={{display: "flex", alignItems: "center", gap: "10px", backgroundColor: "rgba(255,255,255,0.15)", padding: "12px 14px", borderRadius: "12px", fontSize: "12px", fontWeight: "600"}}>
+          <span style={{backgroundColor: "white", color: "#1e40af", padding: "4px 6px", borderRadius: "6px", fontSize: "14px"}}>🔒</span>
           <span>{t.payment}</span>
         </div>
       </section>
 
       {/* Choose Country */}
-      <section style={{padding: "0 16px", marginTop: "24px"}}>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px"}}>
-          <h2 style={{fontSize: "16px", fontWeight: "700"}}>{t.chooseCountry}</h2>
-          <span style={{color: "#3b82f6", fontSize: "14px", fontWeight: "600"}}>{t.seeAll}</span>
+      <section style={{padding: "0 16px", marginTop: "20px"}}>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px"}}>
+          <h2 style={{fontSize: "17px", fontWeight: "800"}}>{t.chooseCountry}</h2>
+          <span style={{color: "#2563eb", fontSize: "14px", fontWeight: "700"}}>{t.seeAll}</span>
         </div>
 
-        <div style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px"}}>
+        <div style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px"}}>
           {countries.map((c, i) => (
             <div key={i} style={{
               backgroundColor: "white",
-              padding: "12px",
-              borderRadius: "12px",
+              padding: "14px 10px",
+              borderRadius: "14px",
               display: "flex",
               alignItems: "center",
               gap: "8px",
               fontSize: "14px",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+              fontWeight: "600",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+              cursor: "pointer"
             }}>
-              <span style={{fontSize: "20px"}}>{c.flag}</span>
-              <span style={{fontWeight: "500"}}>{c.name}</span>
+              <span style={{fontSize: "22px"}}>{c.flag}</span>
+              <span>{c.name}</span>
             </div>
           ))}
         </div>
@@ -166,49 +168,51 @@ export default function Home() {
 
       {/* Popular Subjects */}
       <section style={{padding: "0 16px", marginTop: "24px"}}>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px"}}>
-          <h2 style={{fontSize: "16px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px"}}>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px"}}>
+          <h2 style={{fontSize: "17px", fontWeight: "800", display: "flex", alignItems: "center", gap: "6px"}}>
             🔥 {t.popular}
           </h2>
-          <span style={{color: "#3b82f6", fontSize: "14px", fontWeight: "600"}}>{t.seeAll}</span>
+          <span style={{color: "#2563eb", fontSize: "14px", fontWeight: "700"}}>{t.seeAll}</span>
         </div>
 
         {sujets.map((s, i) => (
           <div key={i} style={{
             backgroundColor: "white",
             padding: "16px",
-            borderRadius: "12px",
+            borderRadius: "16px",
             marginBottom: "12px",
             display: "flex",
             alignItems: "center",
             gap: "12px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
           }}>
-            <div style={{backgroundColor: "#dbeafe", padding: "12px", borderRadius: "8px", fontSize: "10px", fontWeight: "700", color: "#1e40af"}}>
+            <div style={{backgroundColor: "#dbeafe", padding: "10px 8px", borderRadius: "10px", fontSize: "11px", fontWeight: "800", color: "#1e40af", minWidth: "40px", textAlign: "center"}}>
               PDF
             </div>
             <div style={{flex: 1}}>
-              <p style={{fontSize: "11px", color: "#64748b", margin: 0}}>{s.year}</p>
-              <p style={{fontWeight: "700", margin: "4px 0"}}>{s.subject}</p>
-              <div style={{display: "flex", gap: "12px", fontSize: "12px", color: "#64748b"}}>
-                <span>📍 {s.country}</span>
-                {s.correction && <span>✓ {t.correction}</span>}
+              <p style={{fontSize: "12px", color: "#64748b", margin: 0, fontWeight: "500"}}>{s.year}</p>
+              <p style={{fontWeight: "800", margin: "4px 0", fontSize: "16px"}}>{s.subject}</p>
+              <div style={{display: "flex", gap: "14px", fontSize: "12px", color: "#64748b", alignItems: "center"}}>
+                <span style={{display: "flex", alignItems: "center", gap: "4px"}}>📍 {s.country}</span>
+                <span style={{display: "flex", alignItems: "center", gap: "4px", color: "#10b981", fontWeight: "600"}}>✓ {t.correction}</span>
               </div>
             </div>
             <div style={{textAlign: "right"}}>
-              <p style={{fontWeight: "700", margin: 0, fontSize: "14px"}}>{s.price}</p>
+              <p style={{fontWeight: "800", margin: "0 0 8px 0", fontSize: "15px"}}>200 CFA</p>
               <button style={{
                 backgroundColor: "#10b981",
                 color: "white",
                 border: "none",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                fontSize: "13px",
-                fontWeight: "600",
-                marginTop: "8px",
-                cursor: "pointer"
+                padding: "10px 18px",
+                borderRadius: "10px",
+                fontSize: "14px",
+                fontWeight: "700",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px"
               }}>
-                {t.buy}
+                {t.buy} 🛒
               </button>
             </div>
           </div>
@@ -216,16 +220,16 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section style={{margin: "24px 16px", backgroundColor: "white", padding: "20px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "16px"}}>
-        <div style={{fontSize: "40px"}}>📚🎓</div>
+      <section style={{margin: "24px 16px", backgroundColor: "white", padding: "20px", borderRadius: "18px", display: "flex", alignItems: "center", gap: "16px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)"}}>
+        <div style={{fontSize: "42px"}}>📚</div>
         <div style={{flex: 1}}>
-          <p style={{fontWeight: "700", margin: 0}}>{t.cta1}</p>
+          <p style={{fontWeight: "800", margin: 0, fontSize: "15px"}}>{t.cta1}</p>
           <p style={{fontSize: "13px", color: "#64748b", margin: "4px 0 0 0"}}>{t.cta2}</p>
         </div>
         <div style={{fontSize: "32px"}}>🎯</div>
       </section>
 
-      {/* Bottom Nav */}
+      {/* Bottom Nav - 5 items like your design */}
       <nav style={{
         position: "fixed",
         bottom: 0,
@@ -235,20 +239,21 @@ export default function Home() {
         borderTop: "1px solid #e2e8f0",
         display: "flex",
         justifyContent: "space-around",
-        padding: "8px 0"
+        padding: "8px 0",
+        boxShadow: "0 -2px 10px rgba(0,0,0,0.08)"
       }}>
         {t.nav.map((label, i) => (
           <div key={i} style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "4px",
+            gap: "3px",
             color: i === 0? "#10b981" : "#94a3b8",
             fontSize: "11px",
-            fontWeight: i === 0? "600" : "400",
+            fontWeight: i === 0? "700" : "500",
             cursor: "pointer"
           }}>
-            <span style={{fontSize: "20px"}}>{["🏠","📄","🎓","🔍","👤"][i]}</span>
+            <span style={{fontSize: "22px"}}>{["🏠","📄","🎓","🔍","👤"][i]}</span>
             <span>{label}</span>
           </div>
         ))}
