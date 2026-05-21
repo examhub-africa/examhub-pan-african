@@ -1,10 +1,10 @@
 "use client"
 import { useState, useEffect } from "react"
-import { translations } from "@/translations"
+import { translations } from "../translations"
 
 export default function Home() {
   const [lang, setLang] = useState("fr")
-  const t = translations[lang]
+  const t = translations
 
   useEffect(() => {
     const savedLang = localStorage.getItem("bacbepc-lang")
@@ -200,7 +200,7 @@ export default function Home() {
             </div>
             <div>
               <h4 className="font-bold text-white mb-4">{t.quickLinks}</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-8 text-sm">
                 <li><a href="#" className="hover:text-white">{t.forTeachersLink}</a></li>
                 <li><a href="#" className="hover:text-white">{t.forStudentsLink}</a></li>
                 <li><a href="#" className="hover:text-white">{t.howItWorks}</a></li>
@@ -226,7 +226,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 flex-col md:flex-row justify-between items-center text-sm gap-2">
+          <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm gap-2">
             <div>🔒 {t.securePayments}</div>
             <div>© 2025 BacBepc. {t.allRights}</div>
           </div>
