@@ -1,0 +1,65 @@
+export const AFRICAN_COUNTRIES = [
+  // West Africa - 15 countries, show first
+  { name: "Nigeria", slug: "nigeria", flag: "🇳🇬" },
+  { name: "Ghana", slug: "ghana", flag: "🇬🇭" },
+  { name: "Senegal", slug: "senegal", flag: "🇸🇳" },
+  { name: "Ivory Coast", slug: "ivory-coast", flag: "🇨🇮" },
+  { name: "Mali", slug: "mali", flag: "🇲🇱" },
+  { name: "Burkina Faso", slug: "burkina-faso", flag: "🇧🇫" },
+  { name: "Niger", slug: "niger", flag: "🇳🇪" },
+  { name: "Benin", slug: "benin", flag: "🇧🇯" },
+  { name: "Togo", slug: "togo", flag: "🇹🇬" },
+  { name: "Guinea", slug: "guinea", flag: "🇬🇳" },
+  { name: "Sierra Leone", slug: "sierra-leone", flag: "🇸🇱" },
+  { name: "Liberia", slug: "liberia", flag: "🇱🇷" },
+  { name: "Gambia", slug: "gambia", flag: "🇬🇲" },
+  { name: "Guinea-Bissau", slug: "guinea-bissau", flag: "🇬🇼" },
+  { name: "Cape Verde", slug: "cape-verde", flag: "🇨🇻" },
+  
+  // North Africa - 7 countries
+  { name: "Egypt", slug: "egypt", flag: "🇪🇬" },
+  { name: "Morocco", slug: "morocco", flag: "🇲🇦" },
+  { name: "Algeria", slug: "algeria", flag: "🇩🇿" },
+  { name: "Tunisia", slug: "tunisia", flag: "🇹🇳" },
+  { name: "Libya", slug: "libya", flag: "🇱🇾" },
+  { name: "Sudan", slug: "sudan", flag: "🇸🇩" },
+  { name: "Mauritania", slug: "mauritania", flag: "🇲🇷" },
+  
+  // East Africa - 18 countries
+  { name: "Kenya", slug: "kenya", flag: "🇰🇪" },
+  { name: "Ethiopia", slug: "ethiopia", flag: "🇪🇹" },
+  { name: "Tanzania", slug: "tanzania", flag: "🇹🇿" },
+  { name: "Uganda", slug: "uganda", flag: "🇺🇬" },
+  { name: "Rwanda", slug: "rwanda", flag: "🇷🇼" },
+  { name: "Somalia", slug: "somalia", flag: "🇸🇴" },
+  { name: "South Sudan", slug: "south-sudan", flag: "🇸" },
+  { name: "Eritrea", slug: "eritrea", flag: "🇪🇷" },
+  { name: "Djibouti", slug: "djibouti", flag: "🇩🇯" },
+  { name: "Burundi", slug: "burundi", flag: "🇧🇮" },
+  { name: "Seychelles", slug: "seychelles", flag: "🇸🇨" },
+  { name: "Mauritius", slug: "mauritius", flag: "🇲🇺" },
+  { name: "Comoros", slug: "comoros", flag: "🇰🇲" },
+  { name: "Madagascar", slug: "madagascar", flag: "🇲🇬" },
+  { name: "Zambia", slug: "zambia", flag: "🇿🇲" },
+  { name: "Malawi", slug: "malawi", flag: "🇲🇼" },
+  { name: "Mozambique", slug: "mozambique", flag: "🇲🇿" },
+  { name: "Zimbabwe", slug: "zimbabwe", flag: "🇿🇼" },
+  
+  // Central Africa - 9 countries
+  { name: "Cameroon", slug: "cameroon", flag: "🇨🇲" },
+  { name: "Chad", slug: "chad", flag: "🇹🇩" },
+  { name: "Central African Republic", slug: "central-african-republic", flag: "🇨🇫" },
+  { name: "Republic of Congo", slug: "republic-of-congo", flag: "🇨🇬" },
+  { name: "DR Congo", slug: "dr-congo", flag: "🇨🇩" },
+  { name: "Gabon", slug: "gabon", flag: "🇬🇦" },
+  { name: "Equatorial Guinea", slug: "equatorial-guinea", flag: "🇬🇶" },
+  { name: "Sao Tome and Principe", slug: "sao-tome-and-principe", flag: "🇸🇹" },
+  { name: "Angola", slug: "angola", flag: "🇦🇴" },
+  
+  // Southern Africa - 5 countries
+  { name: "South Africa", slug: "south-africa", flag: "🇿🇦" },
+  { name: "Botswana", slug: "botswana", flag: "🇧🇼" },
+  { name: "Namibia", slug: "namibia", flag: "🇳🇦" },
+  { name: "Lesotho", slug: "lesotho", flag: "🇱🇸" },
+  { name: "Eswatini", slug: "eswatini", flag: "🇸🇿" }
+];
