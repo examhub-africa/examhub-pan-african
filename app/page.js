@@ -1,476 +1,70 @@
-'use client'
-
-import { useState } from 'react'
-
-const AFRICAN_COUNTRIES = [
-  'Benin Republic', 'Algeria', 'Angola', 'Botswana', 'Burkina Faso', 'Burundi',
-  'Cabo Verde', 'Cameroon', 'Central African Republic', 'Chad', 'Comoros',
-  'Congo, Democratic Republic of the', 'Congo, Republic of the', 'Cote d\'Ivoire',
-  'Djibouti', 'Egypt', 'Equatorial Guinea', 'Eritrea', 'Eswatini', 'Ethiopia',
-  'Gabon', 'Gambia', 'Ghana', 'Guinea', 'Guinea-Bissau', 'Kenya', 'Lesotho',
-  'Liberia', 'Libya', 'Madagascar', 'Malawi', 'Mali', 'Mauritania', 'Mauritius',
-  'Morocco', 'Mozambique', 'Namibia', 'Niger', 'Nigeria', 'Rwanda',
-  'Sao Tome and Principe', 'Senegal', 'Seychelles', 'Sierra Leone', 'Somalia',
-  'South Africa', 'South Sudan', 'Sudan', 'Tanzania', 'Togo', 'Tunisia',
-  'Uganda', 'Zambia', 'Zimbabwe'
-]
-
-const LANGUAGES = ['English', 'Français']
-
-export default function ExamHubAfricaHomepage() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [selectedCountry, setSelectedCountry] = useState('Benin Republic')
-  const [selectedLanguage, setSelectedLanguage] = useState('English')
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false)
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
-
-  const teacherFeatures = [
-    {
-      title: 'EARN MONTHLY REVENUE SHARE',
-      text: 'Keep 60% of every sale. We handle payments and delivery.',
-      icon: '💼',
-    },
-    {
-      title: 'REACH STUDENTS IN 54 AFRICAN COUNTRIES',
-      text: 'Your lessons can help thousands of learners across the continent.',
-      icon: '🌍',
-    },
-    {
-      title: 'SAVE TIME WITH AUTO-GRADING AND ANALYTICS',
-      text: 'Smart tools help you grade faster and understand student performance.',
-      icon: '📊',
-    },
-  ]
-
-  const freeFeatures = [
-    'Past questions library',
-    'Multiple subjects',
-    'Download and study',
-    'Mobile friendly',
-  ]
-
-  const proFeatures = [
-    'Smart quizzes',
-    'Auto-marking',
-    'Timed mocks',
-    'Performance analytics',
-    'WAEC, NECO, KCSE, IELTS, DELF, TOEFL, BAC, BEPC',
-  ]
-
-  const exams = ['WAEC', 'NECO', 'KCSE', 'BAC', 'BEPC', 'IELTS', 'DELF DALF', 'TOEFL']
-
-  const handleNavClick = () => setMenuOpen(false)
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f7f8fb] text-[#0B1B55] font-sans">
-      {/* Header */}
-      <header className="w-full border-b border-gray-200 bg-white sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white text-2xl shadow-lg">
-              🎓
-            </div>
-
-            <div>
-              <h1 className="text-2xl md:text-3xl font-black leading-none">
-                <span className="text-blue-600">examhub</span>
-                <span className="text-orange-500">-africa</span>
-              </h1>
-              <p className="text-sm text-blue-900 font-semibold">
-                Teach • Share • Earn
-              </p>
-            </div>
-          </div>
-
-          {/* Mobile Menu Button - Now Clickable */}
-          <button
-            className="md:hidden flex-col gap-1 p-2 relative z-50"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span className={`w-8 h-1 rounded-full bg-[#0B1B55] transition-all ${menuOpen? 'rotate-45 translate-y-2' : ''}`}></span>
-            <span className={`w-8 h-1 rounded-full bg-[#0B1B55] transition-all ${menuOpen? 'opacity-0' : ''}`}></span>
-            <span className={`w-8 h-1 rounded-full bg-[#0B1B55] transition-all ${menuOpen? '-rotate-45 -translate-y-2' : ''}`}></span>
-          </button>
-        </div>
-
-        {/* Mobile Menu - Clickable */}
-        {menuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 absolute top-full left-0 right-0 z-40 shadow-lg">
-            <ul className="space-y-4 text-lg font-semibold">
-              <li><button onClick={handleNavClick} className="w-full text-left py-2">For Teachers</button></li>
-              <li><button onClick={handleNavClick} className="w-full text-left py-2">For Students</button></li>
-              <li><button onClick={handleNavClick} className="w-full text-left py-2">How It Works</button></li>
-              <li><button onClick={handleNavClick} className="w-full text-left py-2">Pricing</button></li>
-              <li><button onClick={handleNavClick} className="w-full text-left py-2">FAQs</button></li>
-            </ul>
-          </div>
-        )}
-      </header>
-
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 lg:py-20 grid lg:grid-cols-2 gap-10 items-center">
-          {/* Left */}
+    <main style={{fontFamily: 'Poppins, system-ui, sans-serif', margin: 0, background: '#f5f8ff', color: '#111827'}}>
+      
+      {/* HERO */}
+      <section style={{background: 'linear-gradient(135deg,#0039b5,#0057ff)', color: 'white', padding: '80px 20px', textAlign: 'center'}}>
+        <div style={{maxWidth: '900px', margin: 'auto'}}>
+          <h1 style={{fontSize: '42px', fontWeight: 800, lineHeight: 1.2, marginBottom: '20px'}}>
+            Africa's Biggest Educational Marketplace
+          </h1>
+          <p style={{fontSize: '18px', opacity: 0.95, maxWidth: '600px', margin: '0 auto 30px'}}>
+            Buy and sell BAC, BEPC, WAEC, NECO textbooks, past questions, lessons and study materials from verified teachers across Africa.
+          </p>
           <div>
-            <div className="flex flex-col md:flex-row gap-4 mb-10 relative z-10">
-              {/* Country Select - Now Clickable */}
-              <div className="relative w-full md:w-[260px]">
-                <button
-                  onClick={() => {
-                    setShowCountryDropdown(!showCountryDropdown)
-                    setShowLanguageDropdown(false)
-                  }}
-                  className="bg-white border-gray-200 rounded-2xl px-5 py-4 shadow-sm flex items-center justify-between gap-10 w-full hover:shadow-md transition-shadow"
-                >
-                  <div className="text-left">
-                    <p className="text-xs font-bold uppercase text-gray-500">
-                      Select Country
-                    </p>
-                    <p className="font-bold mt-1">{selectedCountry}</p>
-                  </div>
-                  <span className="text-xl">🌍</span>
-                </button>
-
-                {showCountryDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto z-50">
-                    {AFRICAN_COUNTRIES.map((country) => (
-                      <button
-                        key={country}
-                        onClick={() => {
-                          setSelectedCountry(country)
-                          setShowCountryDropdown(false)
-                        }}
-                        className={`w-full text-left px-4 py-2 hover:bg-blue-50 transition-colors ${selectedCountry === country? 'bg-blue-100 font-bold' : ''}`}
-                      >
-                        {country}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Language Select - Now Clickable */}
-              <div className="relative w-full md:w-[260px]">
-                <button
-                  onClick={() => {
-                    setShowLanguageDropdown(!showLanguageDropdown)
-                    setShowCountryDropdown(false)
-                  }}
-                  className="bg-white border-gray-200 rounded-2xl px-5 py-4 shadow-sm flex items-center justify-between gap-10 w-full hover:shadow-md transition-shadow"
-                >
-                  <div className="text-left">
-                    <p className="text-xs font-bold uppercase text-gray-500">
-                      Select Language
-                    </p>
-                    <p className="font-bold mt-1">{selectedLanguage}</p>
-                  </div>
-                  <span className="text-xl">🌐</span>
-                </button>
-
-                {showLanguageDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50">
-                    {LANGUAGES.map((lang) => (
-                      <button
-                        key={lang}
-                        onClick={() => {
-                          setSelectedLanguage(lang)
-                          setShowLanguageDropdown(false)
-                        }}
-                        className={`w-full text-left px-4 py-2 hover:bg-blue-50 transition-colors ${selectedLanguage === lang? 'bg-blue-100 font-bold' : ''}`}
-                      >
-                        {lang}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <h2 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight text-[#07245F]">
-              TURN YOUR
-              <br />
-              LESSONS
-              <br />
-              INTO INCOME.
-            </h2>
-
-            <h3 className="text-4xl md:text-6xl font-black leading-tight text-orange-500 mt-5">
-              HELP STUDENTS
-              <br />
-              ACROSS AFRICA.
-            </h3>
-
-            <p className="mt-6 text-lg md:text-2xl font-bold text-[#0B1B55]">
-              Upload once. Earn monthly. Keep 60%.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-5 mt-10 relative z-10">
-              <button className="bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white font-black text-lg px-8 py-5 rounded-2xl shadow-xl">
-                👨‍🏫 I&apos;M A TEACHER
-              </button>
-
-              <button className="bg-orange-500 hover:bg-orange-600 transition-all duration-300 text-white font-black text-lg px-8 py-5 rounded-2xl shadow-xl">
-                🎓 I&apos;M A STUDENT
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
-              <div className="bg-white rounded-2xl p-4 shadow-sm border-gray-100">
-                <p className="font-black text-sm">SECURE PAYMENTS</p>
-                <p className="text-gray-500 text-sm mt-1">Powered by Paystack</p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 shadow-sm border-gray-100">
-                <p className="font-black text-sm">TRUSTED BY TEACHERS</p>
-                <p className="text-gray-500 text-sm mt-1">Across Africa</p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 shadow-sm border-gray-100">
-                <p className="font-black text-sm">YOUR CONTENT</p>
-                <p className="text-gray-500 text-sm mt-1">Your earnings protected</p>
-              </div>
-            </div>
+            <button 
+              onClick={() => window.location.href='/marketplace'} 
+              style={{padding: '16px 32px', border: 'none', borderRadius: '14px', fontSize: '16px', fontWeight: 700, background: 'white', color: '#0057ff', cursor: 'pointer', margin: '8px'}}
+            >
+              Browse Marketplace
+            </button>
+            <button 
+              onClick={() => window.location.href='/teacher-upload'} 
+              style={{padding: '16px 32px', border: '2px solid white', borderRadius: '14px', fontSize: '16px', fontWeight: 700, background: 'transparent', color: 'white', cursor: 'pointer', margin: '8px'}}
+            >
+              I'm a Teacher - Start Earning
+            </button>
           </div>
+        </div>
+      </section>
 
-          {/* Right */}
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full blur-3xl opacity-60"></div>
-
-            <div className="relative z-10 w-[340px] md:w-[420px] h-[540px] rounded-[40px] bg-gradient-to-b from-[#1f4fff] to-[#0B1B55] shadow-2xl overflow-hidden flex items-end justify-center">
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop"
-                alt="African teacher"
-                className="h-full w-full object-cover"
-              />
+      {/* FEATURES FOR TEACHERS */}
+      <section style={{padding: '80px 20px', background: 'white'}}>
+        <div style={{maxWidth: '1100px', margin: 'auto', textAlign: 'center'}}>
+          <h2 style={{fontSize: '32px', fontWeight: 800, color: '#0033a0', marginBottom: '12px'}}>Built for African Teachers</h2>
+          <p style={{color: '#6b7280', fontSize: '16px', marginBottom: '50px'}}>Create once. Earn forever. Reach 54 countries.</p>
+          
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px'}}>
+            <div style={{background: '#f8fafc', padding: '30px', borderRadius: '20px', textAlign: 'left'}}>
+              <div style={{fontSize: '36px', marginBottom: '15px'}}>💰</div>
+              <h3 style={{fontSize: '18px', fontWeight: 700, marginBottom: '10px', color: '#111827'}}>60% Revenue Share</h3>
+              <p style={{fontSize: '14px', color: '#4b5563', lineHeight: 1.6}}>Keep most of every sale. We handle payments, taxes, and delivery to students.</p>
             </div>
-
-            <div className="absolute left-0 top-10 bg-white rounded-3xl p-5 shadow-2xl w-52 border-gray-100 z-20">
-              <p className="text-sm font-bold text-gray-500">TOTAL STUDENTS</p>
-              <h4 className="text-4xl font-black mt-2 text-blue-600">12,540</h4>
+            <div style={{background: '#f8fafc', padding: '30px', borderRadius: '20px', textAlign: 'left'}}>
+              <div style={{fontSize: '36px', marginBottom: '15px'}}>🌍</div>
+              <h3 style={{fontSize: '18px', fontWeight: 700, marginBottom: '10px', color: '#111827'}}>Pan-African Reach</h3>
+              <p style={{fontSize: '14px', color: '#4b5563', lineHeight: 1.6}}>Your BAC, BEPC, WAEC, NECO content helps students from Nigeria to Cameroon and beyond.</p>
             </div>
-
-            <div className="absolute right-0 bottom-16 bg-white rounded-3xl p-5 shadow-2xl w-56 border-gray-100 z-20">
-              <p className="text-sm font-bold text-gray-500">
-                CONTENT PERFORMANCE
-              </p>
-
-              <div className="flex items-center gap-4 mt-4">
-                <div className="w-20 h-20 rounded-full border-[8px] border-green-500 flex items-center justify-center font-black text-xl">
-                  85%
-                </div>
-
-                <div>
-                  <p className="font-black text-2xl text-blue-600">85%</p>
-                  <p className="text-sm text-gray-500">Engagement</p>
-                </div>
-              </div>
+            <div style={{background: '#f8fafc', padding: '30px', borderRadius: '20px', textAlign: 'left'}}>
+              <div style={{fontSize: '36px', marginBottom: '15px'}}>📊</div>
+              <h3 style={{fontSize: '18px', fontWeight: 700, marginBottom: '10px', color: '#111827'}}>Auto-Grading + Analytics</h3>
+              <p style={{fontSize: '14px', color: '#4b5563', lineHeight: 1.6}}>Track test results, see what students struggle with, save hours every week.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Teachers Section */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <div className="bg-[#EEF3FF] rounded-[40px] p-8 md:p-14 shadow-sm">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-black text-[#07245F]">FOR TEACHERS</h2>
-            <p className="mt-3 text-xl font-bold text-blue-900">
-              Create once. Earn forever.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {teacherFeatures.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-[32px] p-8 shadow-lg border-gray-100 hover:-translate-y-2 transition-all duration-300"
-              >
-                <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-4xl text-white shadow-lg mb-8">
-                  {item.icon}
-                </div>
-
-                <h3 className="text-2xl font-black leading-tight text-[#07245F]">
-                  {item.title}
-                </h3>
-
-                <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* CTA */}
+      <section style={{padding: '60px 20px', background: '#0039b5', color: 'white', textAlign: 'center'}}>
+        <h2 style={{fontSize: '28px', fontWeight: 800, marginBottom: '16px'}}>Ready to Turn Knowledge into Income?</h2>
+        <button 
+          onClick={() => window.location.href='/marketplace'} 
+          style={{padding: '16px 32px', border: 'none', borderRadius: '14px', fontSize: '16px', fontWeight: 700, background: '#ff9800', color: 'white', cursor: 'pointer'}}
+        >
+          Explore Study Materials Now
+        </button>
       </section>
 
-      {/* Student Plans */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 pb-20">
-        <div className="bg-[#FFFDF9] rounded-[40px] p-8 md:p-14 shadow-sm border-orange-100">
-          <div className="text-center mb-14">
-            <h2 className="text-5xl font-black text-[#07245F]">FOR STUDENTS</h2>
-            <p className="mt-3 text-xl font-bold text-blue-900">
-              Choose the plan that fits your goals.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-10">
-            {/* Free Plan */}
-            <div className="bg-white border-2 border-blue-500 rounded-[32px] p-8 shadow-xl">
-              <span className="inline-block bg-blue-600 text-white px-5 py-2 rounded-full font-black text-lg">
-                FREE
-              </span>
-
-              <div className="flex items-center justify-between gap-4 mt-8">
-                <div>
-                  <h3 className="text-4xl font-black text-blue-600">
-                    FREE ACCESS
-                  </h3>
-
-                  <p className="mt-4 text-lg text-gray-600">
-                    Basic past questions from multiple teachers.
-                  </p>
-                </div>
-
-                <div className="text-7xl">📘</div>
-              </div>
-
-              <ul className="mt-10 space-y-5">
-                {freeFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-4 text-lg">
-                    <span className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-black">
-                      ✓
-                    </span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <button className="w-full mt-12 bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white text-xl font-black py-5 rounded-2xl shadow-lg">
-                GET STARTED FOR FREE
-              </button>
-            </div>
-
-            {/* Pro Plan */}
-            <div className="bg-white border-2 border-orange-500 rounded-[32px] p-8 shadow-xl">
-              <span className="inline-block bg-orange-500 text-white px-5 py-2 rounded-full font-black text-lg">
-                PRO
-              </span>
-
-              <div className="flex items-center justify-between gap-4 mt-8">
-                <div>
-                  <h3 className="text-4xl font-black text-orange-500">
-                    PRO ACCESS
-                  </h3>
-
-                  <p className="mt-4 text-lg text-gray-600">
-                    Smart learning tools for exam success.
-                  </p>
-                </div>
-
-                <div className="text-7xl">🎓</div>
-              </div>
-
-              <ul className="mt-10 space-y-5">
-                {proFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-4 text-lg">
-                    <span className="w-7 h-7 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-black mt-1">
-                      ✓
-                    </span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button className="w-full mt-12 bg-orange-500 hover:bg-orange-600 transition-all duration-300 text-white text-xl font-black py-5 rounded-2xl shadow-lg">
-                GO PRO
-              </button>
-            </div>
-          </div>
-
-          {/* Exams */}
-          <div className="mt-20 text-center">
-            <h3 className="text-3xl font-black text-[#07245F] mb-10">
-              EXAMS WE SUPPORT
-            </h3>
-
-            <div className="flex flex-wrap justify-center gap-5">
-              {exams.map((exam, index) => (
-                <div
-                  key={index}
-                  className="bg-white px-8 py-5 rounded-2xl shadow-md border-gray-100 text-xl font-black"
-                >
-                  {exam}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-[#071B4D] text-white">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 grid md:grid-cols-3 gap-12">
-          <div>
-            <h2 className="text-4xl font-black">
-              <span className="text-blue-400">examhub</span>
-              <span className="text-orange-500">-africa</span>
-            </h2>
-
-            <p className="mt-5 text-gray-300 text-lg leading-relaxed">
-              Teacher-powered marketplace for African education.
-            </p>
-
-            <div className="flex gap-4 mt-8 text-2xl">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                f
-              </div>
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                x
-              </div>
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                in
-              </div>
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                ▶
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-2xl font-black mb-6">QUICK LINKS</h3>
-
-            <ul className="space-y-4 text-gray-300 text-lg">
-              <li>For Teachers</li>
-              <li>For Students</li>
-              <li>How It Works</li>
-              <li>Pricing</li>
-              <li>FAQs</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-2xl font-black mb-6">CONTACT US</h3>
-
-            <div className="space-y-5 text-gray-300 text-lg">
-              <p>✉️ hello@examhub-africa.com</p>
-              <a
-                href="https://wa.me/2347035092983"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block hover:text-green-400 transition-colors duration-300"
-              >
-                📞 WhatsApp: 07035092983
-              </a>
-              <p>📍 Lagos, Nigeria</p>
-              <p>🌐 www.examhub-africa.com</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-white/10 py-6 text-center text-gray-400 text-sm px-4">
-          © 2026 ExamHub Africa. All rights reserved.
-        </div>
-      </footer>
-    </div>
-  )
+    </main>
+  );
 }
