@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Mock Exams</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+    .container { padding: 20px 16px; }
+
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header-text h1 { font-size: 20px; font-weight: 700; }
+    .header-text p { font-size: 12px; color: #64748b; }
+
+    .info-bar { background: white; padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .info-item { text-align: center; }
+    .info-label { font-size: 11px; color: #94a3b8; }
+    .info-value { font-size: 14px; font-weight: 600; }
+
+    .exam-card { background: white; padding: 16px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; cursor: pointer; transition: transform 0.2s; }
+    .exam-card:hover { transform: translateY(-2px); }
+    .exam-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; }
+    .exam-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .exam-sub { font-size: 13px; color: #64748b; }
+    .exam-badge { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .exam-badge.premium { background: #fef3c7; color: #78350f; }
+    
+    .exam-meta { display: flex; gap: 16px; font-size: 12px; color: #64748b; margin-bottom: 12px; }
+    .meta-item { display: flex; align-items: center; gap: 4px; }
+
+    .btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 600; font-size: 14px; cursor: pointer; }
+    .btn-green { background: #10b981; color: white; }
+    .btn-disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+
+    .streak { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #78350f; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+    .nav-item.active { color: #10b981; }
+    .nav-icon { font-size: 20px; }
+
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: #94a3b8; }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="streakBadge" class="streak">🔥 <span id="streakCount">0</span></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Mock Exams</h1>
+        <p id="subjectText">Loading...</p>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-item">
+        <div class="info-label">Country</div>
+        <div class="info-value" id="countryDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Language</div>
+        <div class="info-value" id="langDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Completed</div>
+        <div class="info-value"><span id="completed">0</span></div>
+      </div>
+    </div>
+
+    <div id="examsList"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item active">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Payment page coming soon')">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if user picked country + language
+    const country = localStorage.getItem('afrikexams_country');
+    const lang = localStorage.getItem('afrikexams_lang');
+
+    if(!country || !lang) {
+      alert('Please select country and language first');
+      window.location.href = 'index.html';
+    }
+
+    // Display selection
+    document.getElementById('countryDisplay').textContent = country;
+    document.getElementById('langDisplay').textContent = lang === 'en' ? 'English' : 'Français';
+    document.getElementById('subjectText').textContent = `Mock exams for ${country}`;
+
+    // Daily streak
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem('afrikexams_last_visit');
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '0');
+
+      if(lastVisit !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if(lastVisit === yesterday.toDateString()) {
+          streak += 1;
+        } else {
+          streak = 1;
+        }
+        localStorage.setItem('afrikexams_streak', streak);
+        localStorage.setItem('afrikexams_last_visit', today);
+      }
+
+      document.getElementById('streakCount').textContent = streak;
+    }
+    updateStreak();
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Mock exam data by country
+    const examsByCountry = {
+      "Cameroon": [
+        { id: 1, title: "GCE Ordinary Level - Math", questions: 50, time: "2h", premium: false },
+        { id: 2, title: "BAC A-Level - Physics", questions: 40, time: "2h", premium: false },
+        { id: 3, title: "BEPC - English", questions: 60, time: "1h 30m", premium: true }
+      ],
+      "Nigeria": [
+        { id: 1, title: "WAEC - Mathematics", questions: 60, time: "2h 30m", premium: false },
+        { id: 2, title: "JAMB - Use of English", questions: 80, time: "2h", premium: false },
+        { id: 3, title: "NECO - Biology", questions: 50, time: "2h", premium: true }
+      ],
+      "default": [
+        { id: 1, title: "General Math Mock", questions: 40, time: "1h", premium: false },
+        { id: 2, title: "Science Mock Exam", questions: 50, time: "1h 30m", premium: false }
+      ]
+    };
+
+    // Get exams for selected country
+    const examList = examsByCountry[country] || examsByCountry["default"];
+    const completedExams = JSON.parse(localStorage.getItem('afrikexams_completed_exams') || '[]');
+    document.getElementById('completed').textContent = completedExams.length;
+
+    // Render exams
+    const examsContainer = document.getElementById('examsList');
+
+    if(examList.length === 0) {
+      examsContainer.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📄</div>
+          <div>No mock exams yet for ${country}</div>
+        </div>
+      `;
+    } else {
+      examList.forEach(exam => {
+        const isCompleted = completedExams.includes(exam.id);
+        const isPremium = exam.premium;
+        
+        const card = document.createElement('div');
+        card.className = 'exam-card';
+        card.innerHTML = `
+          <div class="exam-header">
+            <div>
+              <div class="exam-title">${exam.title}</div>
+              <div class="exam-sub">Full mock test</div>
+            </div>
+            <div class="exam-badge ${isPremium ? 'premium' : ''}">${isPremium ? '👑 Premium' : 'Free'}</div>
+          </div>
+          <div class="exam-meta">
+            <div class="meta-item">📝 ${exam.questions} Qs</div>
+            <div class="meta-item">⏱️ ${exam.time}</div>
+            <div class="meta-item">${isCompleted ? '✅ Done' : '⏳ New'}</div>
+          </div>
+          <button class="btn ${isPremium ? 'btn-disabled' : 'btn-green'}" 
+                  ${isPremium ? 'disabled' : ''} 
+                  onclick="startExam(${exam.id}, ${isPremium})">
+            ${isCompleted ? 'Retake Exam' : 'Start Exam'}
+          </button>
+        `;
+        examsContainer.appendChild(card);
+      });
+    }
+
+    function startExam(id, isPremium) {
+      if(isPremium) {
+        toast('Premium exam - Go Premium to unlock');
+        return;
+      }
+      
+      // Mark as completed for demo
+      if(!completedExams.includes(id)) {
+        completedExams.push(id);
+        localStorage.setItem('afrikexams_completed_exams', JSON.stringify(completedExams));
+        document.getElementById('completed').textContent = completedExams.length;
+      }
+      
+      toast(`Starting Exam ${id} - Questions page coming next`);
+      // Next step: we'll create exam-questions.html
+    }
+  </script>
+</body>
+</html>

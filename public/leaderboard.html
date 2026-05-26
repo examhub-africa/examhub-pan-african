@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Leaderboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+    .container { padding: 20px 16px; }
+
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header-text h1 { font-size: 20px; font-weight: 700; }
+    .header-text p { font-size: 12px; color: #64748b; }
+
+    .info-bar { background: white; padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .info-item { text-align: center; }
+    .info-label { font-size: 11px; color: #94a3b8; }
+    .info-value { font-size: 14px; font-weight: 600; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: white; padding: 4px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .tab { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #64748b; }
+    .tab.active { background: #10b981; color: white; }
+
+    .top-3 { display: flex; justify-content: center; align-items: end; gap: 12px; margin-bottom: 24px; }
+    .podium { text-align: center; }
+    .podium-1 { order: 2; }
+    .podium-2 { order: 1; }
+    .podium-3 { order: 3; }
+    .podium-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 8px; border: 3px solid; }
+    .podium-1 .podium-avatar { width: 80px; height: 80px; font-size: 32px; border-color: #fbbf24; background: #fef3c7; }
+    .podium-2 .podium-avatar { border-color: #94a3b8; background: #f1f5f9; }
+    .podium-3 .podium-avatar { border-color: #cd7f32; background: #ffedd5; }
+    .podium-rank { font-size: 20px; margin-bottom: 4px; }
+    .podium-name { font-size: 12px; font-weight: 600; }
+    .podium-score { font-size: 11px; color: #64748b; }
+
+    .leaderboard-list { background: white; border-radius: 16px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .leader-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+    .leader-item.you { background: #dcfce7; border: 2px solid #10b981; }
+    .rank { width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+    .rank.top { background: #fbbf24; color: #78350f; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .leader-info { flex: 1; }
+    .leader-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .leader-sub { font-size: 11px; color: #64748b; }
+    .leader-points { text-align: right; }
+    .points { font-size: 15px; font-weight: 700; color: #10b981; }
+    .points-label { font-size: 10px; color: #94a3b8; }
+
+    .streak { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #78350f; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+    .nav-item.active { color: #10b981; }
+    .nav-icon { font-size: 20px; }
+
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="streakBadge" class="streak">🔥 <span id="streakCount">0</span></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Leaderboard</h1>
+        <p id="subjectText">Loading...</p>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-item">
+        <div class="info-label">Country</div>
+        <div class="info-value" id="countryDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Language</div>
+        <div class="info-value" id="langDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Your Rank</div>
+        <div class="info-value">#<span id="yourRank">-</span></div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('weekly')">Weekly</button>
+      <button class="tab" onclick="switchTab('monthly')">Monthly</button>
+      <button class="tab" onclick="switchTab('alltime')">All Time</button>
+    </div>
+
+    <div class="top-3" id="top3Container"></div>
+
+    <div class="leaderboard-list" id="leaderboardList"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Payment page coming soon')">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if user picked country + language
+    const country = localStorage.getItem('afrikexams_country');
+    const lang = localStorage.getItem('afrikexams_lang');
+
+    if(!country || !lang) {
+      alert('Please select country and language first');
+      window.location.href = 'index.html';
+    }
+
+    // Display selection
+    document.getElementById('countryDisplay').textContent = country;
+    document.getElementById('langDisplay').textContent = lang === 'en' ? 'English' : 'Français';
+    document.getElementById('subjectText').textContent = `Top students in ${country}`;
+
+    // Daily streak
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem('afrikexams_last_visit');
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '0');
+
+      if(lastVisit !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if(lastVisit === yesterday.toDateString()) {
+          streak += 1;
+        } else {
+          streak = 1;
+        }
+        localStorage.setItem('afrikexams_streak', streak);
+        localStorage.setItem('afrikexams_last_visit', today);
+      }
+
+      document.getElementById('streakCount').textContent = streak;
+    }
+    updateStreak();
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Mock leaderboard data
+    const leaderboardData = {
+      weekly: [
+        { name: "Sarah M.", points: 2450, country: "Kenya", avatar: "👩" },
+        { name: "David K.", points: 2380, country: "Nigeria", avatar: "👨" },
+        { name: "Aisha L.", points: 2290, country: "Cameroon", avatar: "👩" },
+        { name: "You", points: 1850, country: country, avatar: "😎", isYou: true },
+        { name: "John P.", points: 1720, country: "Ghana", avatar: "👨" },
+        { name: "Fatima Z.", points: 1650, country: "Egypt", avatar: "👩" },
+        { name: "Michael T.", points: 1580, country: "South Africa", avatar: "👨" },
+        { name: "Grace W.", points: 1420, country: "Uganda", avatar: "👩" },
+        { name: "Peter N.", points: 1380, country: "Tanzania", avatar: "👨" },
+        { name: "Linda S.", points: 1290, country: "Zambia", avatar: "👩" }
+      ],
+      monthly: [
+        { name: "David K.", points: 9850, country: "Nigeria", avatar: "👨" },
+        { name: "Sarah M.", points: 9620, country: "Kenya", avatar: "👩" },
+        { name: "You", points: 7850, country: country, avatar: "😎", isYou: true },
+        { name: "Aisha L.", points: 7490, country: "Cameroon", avatar: "👩" },
+        { name: "John P.", points: 7120, country: "Ghana", avatar: "👨" },
+        { name: "Michael T.", points: 6580, country: "South Africa", avatar: "👨" },
+        { name: "Fatima Z.", points: 6250, country: "Egypt", avatar: "👩" },
+        { name: "Grace W.", points: 5420, country: "Uganda", avatar: "👩" },
+        { name: "Peter N.", points: 5180, country: "Tanzania", avatar: "👨" },
+        { name: "Linda S.", points: 4890, country: "Zambia", avatar: "👩" }
+      ],
+      alltime: [
+        { name: "David K.", points: 45200, country: "Nigeria", avatar: "👨" },
+        { name: "Sarah M.", points: 43800, country: "Kenya", avatar: "👩" },
+        { name: "Aisha L.", points: 41900, country: "Cameroon", avatar: "👩" },
+        { name: "John P.", points: 38200, country: "Ghana", avatar: "👨" },
+        { name: "You", points: 36850, country: country, avatar: "😎", isYou: true },
+        { name: "Michael T.", points: 34580, country: "South Africa", avatar: "👨" },
+        { name: "Fatima Z.", points: 33250, country: "Egypt", avatar: "👩" },
+        { name: "Grace W.", points: 29420, country: "Uganda", avatar: "👩" },
+        { name: "Peter N.", points: 27180, country: "Tanzania", avatar: "👨" },
+        { name: "Linda S.", points: 25890, country: "Zambia", avatar: "👩" }
+      ]
+    };
+
+    let currentTab = 'weekly';
+
+    function renderLeaderboard(tab) {
+      const data = leaderboardData[tab];
+      const top3 = data.slice(0, 3);
+      const rest = data.slice(3);
+
+      // Find your rank
+      const yourIndex = data.findIndex(s => s.isYou);
+      document.getElementById('yourRank').textContent = yourIndex + 1;
+
+      // Render Top 3 podium
+      const top3Container = document.getElementById('top3Container');
+      top3Container.innerHTML = `
+        <div class="podium podium-2">
+          <div class="podium-rank">🥈</div>
+          <div class="podium-avatar">${top3[1].avatar}</div>
+          <div class="podium-name">${top3[1].name}</div>
+          <div class="podium-score">${top3[1].points} pts</div>
+        </div>
+        <div class="podium podium-1">
+          <div class="podium-rank">👑</div>
+          <div class="podium-avatar">${top3[0].avatar}</div>
+          <div class="podium-name">${top3[0].name}</div>
+          <div class="podium-score">${top3[0].points} pts</div>
+        </div>
+        <div class="podium podium-3">
+          <div class="podium-rank">🥉</div>
+          <div class="podium-avatar">${top3[2].avatar}</div>
+          <div class="podium-name">${top3[2].name}</div>
+          <div class="podium-score">${top3[2].points} pts</div>
+        </div>
+      `;
+
+      // Render rest of list
+      const listContainer = document.getElementById('leaderboardList');
+      listContainer.innerHTML = '';
+      rest.forEach((student, idx) => {
+        const rank = idx + 4;
+        const item = document.createElement('div');
+        item.className = `leader-item ${student.isYou ? 'you' : ''}`;
+        item.innerHTML = `
+          <div class="rank">${rank}</div>
+          <div class="avatar">${student.avatar}</div>
+          <div class="leader-info">
+            <div class="leader-name">${student.name} ${student.isYou ? '(You)' : ''}</div>
+            <div class="leader-sub">${student.country}</div>
+          </div>
+          <div class="leader-points">
+            <div class="points">${student.points}</div>
+            <div class="points-label">points</div>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      renderLeaderboard(tab);
+    }
+
+    // Load initial
+    renderLeaderboard('weekly');
+  </script>
+</body>
+</html>

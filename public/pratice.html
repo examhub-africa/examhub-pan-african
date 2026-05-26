@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Practice</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+   .container { padding: 20px 16px; }
+
+   .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+   .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+   .header-text h1 { font-size: 20px; font-weight: 700; }
+   .header-text p { font-size: 12px; color: #64748b; }
+
+   .info-bar { background: white; padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+   .info-item { text-align: center; }
+   .info-label { font-size: 11px; color: #94a3b8; }
+   .info-value { font-size: 14px; font-weight: 600; }
+
+   .question-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
+   .question-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+   .question-count { font-size: 12px; color: #64748b; font-weight: 600; }
+   .question-difficulty { font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
+   .difficulty-easy { background: #dcfce7; color: #166534; }
+   .difficulty-medium { background: #fef3c7; color: #78350f; }
+   .difficulty-hard { background: #fee2e2; color: #991b1b; }
+
+   .question-text { font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+
+   .options { display: flex; flex-direction: column; gap: 12px; }
+   .option { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+   .option:hover { border-color: #10b981; }
+   .option.selected { border-color: #10b981; background: #dcfce7; }
+   .option.correct { border-color: #10b981; background: #dcfce7; }
+   .option.wrong { border-color: #ef4444; background: #fee2e2; }
+   .option.disabled { pointer-events: none; opacity: 0.7; }
+
+   .btn-next { width: 100%; background: #10b981; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+   .btn-next:disabled { background: #94a3b8; cursor: not-allowed; }
+
+   .explanation { background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-size: 13px; line-height: 1.5; display: none; }
+   .explanation.show { display: block; }
+
+   .score-summary { background: white; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: none; }
+   .score-summary.show { display: block; }
+   .score-icon { font-size: 48px; margin-bottom: 12px; }
+   .score-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+   .score-text { font-size: 14px; color: #64748b; margin-bottom: 20px; }
+   .score-value { font-size: 36px; font-weight: 800; color: #10b981; }
+
+   .streak { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #78350f; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+   .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+   .nav-item.active { color: #10b981; }
+   .nav-icon { font-size: 20px; }
+
+   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="streakBadge" class="streak">🔥 <span id="streakCount">0</span></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Practice Questions</h1>
+        <p id="subjectText">Loading...</p>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-item">
+        <div class="info-label">Country</div>
+        <div class="info-value" id="countryDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Language</div>
+        <div class="info-value" id="langDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Score</div>
+        <div class="info-value"><span id="currentScore">0</span>/<span id="totalAnswered">0</span></div>
+      </div>
+    </div>
+
+    <div id="quizContainer">
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-count">Question <span id="qNumber">1</span> of <span id="qTotal">10</span></div>
+          <div class="question-difficulty" id="qDifficulty">Easy</div>
+        </div>
+        <div class="question-text" id="questionText">Loading question...</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="explanation" id="explanation"></div>
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+      </div>
+    </div>
+
+    <div class="score-summary" id="scoreSummary">
+      <div class="score-icon">🎉</div>
+      <div class="score-title">Practice Complete!</div>
+      <div class="score-text">You scored</div>
+      <div class="score-value" id="finalScore">0%</div>
+      <button class="btn-next" onclick="restartQuiz()">Practice Again</button>
+      <button class="btn-next" style="background:white; color:#10b981; border:2px solid #10b981; margin-top:8px;" onclick="window.location.href='index.html'">Back to Home</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item active">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Payment page coming soon')">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if user picked country + language
+    const country = localStorage.getItem('afrikexams_country');
+    const lang = localStorage.getItem('afrikexams_lang');
+
+    if(!country ||!lang) {
+      alert('Please select country and language first');
+      window.location.href = 'index.html';
+    }
+
+    // Display selection
+    document.getElementById('countryDisplay').textContent = country;
+    document.getElementById('langDisplay').textContent = lang === 'en'? 'English' : 'Français';
+    document.getElementById('subjectText').textContent = `Practice questions for ${country}`;
+
+    // Daily streak
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem('afrikexams_last_visit');
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '0');
+
+      if(lastVisit!== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if(lastVisit === yesterday.toDateString()) {
+          streak += 1;
+        } else {
+          streak = 1;
+        }
+        localStorage.setItem('afrikexams_streak', streak);
+        localStorage.setItem('afrikexams_last_visit', today);
+      }
+
+      document.getElementById('streakCount').textContent = streak;
+    }
+    updateStreak();
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Load questions from teacher uploads
+    const allQuestions = JSON.parse(localStorage.getItem('afrikexams_questions') || '[]');
+    let questions = allQuestions.filter(q =>
+      q.type === 'practice' &&
+      q.country === country &&
+      q.language === lang
+    );
+
+    // If no teacher questions, show demo questions
+    if(questions.length === 0) {
+      questions = [
+        {
+          id: 1,
+          question: "What is 15 + 27?",
+          options: ["40", "42", "41", "43"],
+          correct: 1,
+          difficulty: "easy",
+          explanation: "15 + 27 = 42"
+        },
+        {
+          id: 2,
+          question: "Which planet is known as the Red Planet?",
+          options: ["Venus", "Mars", "Jupiter", "Saturn"],
+          correct: 1,
+          difficulty: "easy",
+          explanation: "Mars appears red due to iron oxide on its surface."
+        },
+        {
+          id: 3,
+          question: "Solve for x: 2x + 5 = 15",
+          options: ["x = 4", "x = 5", "x = 6", "x = 10"],
+          correct: 1,
+          difficulty: "medium",
+          explanation: "2x = 15 - 5 = 10, so x = 5"
+        }
+      ];
+      toast('No teacher questions yet. Showing demo questions.');
+    }
+
+    let currentQ = 0;
+    let score = 0;
+    let answered = 0;
+    let selectedOption = null;
+
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const nextBtn = document.getElementById('nextBtn');
+    const explanation = document.getElementById('explanation');
+    const qNumber = document.getElementById('qNumber');
+    const qTotal = document.getElementById('qTotal');
+    const qDifficulty = document.getElementById('qDifficulty');
+    const currentScore = document.getElementById('currentScore');
+    const totalAnswered = document.getElementById('totalAnswered');
+
+    qTotal.textContent = questions.length;
+
+    function loadQuestion() {
+      if(currentQ >= questions.length) {
+        showScore();
+        return;
+      }
+
+      const q = questions[currentQ];
+      questionText.textContent = q.question;
+      qNumber.textContent = currentQ + 1;
+      qDifficulty.textContent = q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1);
+      qDifficulty.className = `question-difficulty difficulty-${q.difficulty}`;
+
+      optionsContainer.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.textContent = opt;
+        div.onclick = () => selectOption(idx, div);
+        optionsContainer.appendChild(div);
+      });
+
+      explanation.classList.remove('show');
+      nextBtn.disabled = true;
+      selectedOption = null;
+    }
+
+    function selectOption(idx, element) {
+      if(selectedOption!== null) return; // Already answered
+
+      selectedOption = idx;
+      const q = questions[currentQ];
+      const options = document.querySelectorAll('.option');
+
+      options.forEach(opt => opt.classList.add('disabled'));
+
+      if(idx === q.correct) {
+        element.classList.add('correct');
+        score++;
+        toast('Correct! ✅');
+      } else {
+        element.classList.add('wrong');
+        options[q.correct].classList.add('correct');
+        toast('Wrong ❌');
+      }
+
+      answered++;
+      currentScore.textContent = score;
+      totalAnswered.textContent = answered;
+
+      if(q.explanation) {
+        explanation.textContent = q.explanation;
+        explanation.classList.add('show');
+      }
+
+      nextBtn.disabled = false;
+
+      // Award coins for correct answer
+      if(idx === q.correct) {
+        let coins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+        coins += 10;
+        localStorage.setItem('afrikexams_coins', coins);
+      }
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      loadQuestion();
+    }
+
+    function showScore() {
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('scoreSummary').classList.add('show');
+      const percentage = Math.round((score / questions.length) * 100);
+      document.getElementById('finalScore').textContent = percentage + '%';
+    }
+
+    function restartQuiz() {
+      currentQ = 0;
+      score = 0;
+      answered = 0;
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('scoreSummary').classList.remove('show');
+      currentScore.textContent = '0';
+      totalAnswered.textContent = '0';
+      loadQuestion();
+    }
+
+    // Load first question
+    loadQuestion();
+  </script>
+</body>
+</html>

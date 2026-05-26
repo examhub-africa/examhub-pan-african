@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Payment</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+  .container { padding: 20px 16px; }
+
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .header-text h1 { font-size: 20px; font-weight: 700; }
+  .header-text p { font-size: 12px; color: #64748b; }
+
+  .balance-card { background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; text-align: center; }
+  .balance-label { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+  .balance-value { font-size: 36px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .premium-badge { background: #fbbf24; color: #78350f; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-top: 8px; display: inline-block; }
+
+  .section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .section-subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+
+  .packs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .pack-card { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; border: 2px solid #e2e8f0; }
+  .pack-card.selected { border-color: #10b981; background: #f0fdf4; }
+  .pack-coins { font-size: 24px; margin-bottom: 4px; }
+  .pack-price { font-size: 18px; font-weight: 700; color: #10b981; }
+  .pack-bonus { font-size: 11px; color: #ef4444; margin-top: 4px; }
+
+  .premium-card { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #78350f; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; border: 2px solid transparent; }
+  .premium-card.selected { border-color: #78350f; }
+  .premium-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .premium-price { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+  .premium-features { font-size: 12px; line-height: 1.6; }
+  .premium-features li { margin-bottom: 4px; list-style: none; }
+  .premium-features li:before { content: "✓ "; font-weight: 700; }
+
+  .payment-methods { background: white; border-radius: 16px; padding: 16px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .method-option { display: flex; align-items: center; gap: 12px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; cursor: pointer; }
+  .method-option.selected { border-color: #10b981; background: #f0fdf4; }
+  .method-icon { font-size: 32px; }
+  .method-info { flex: 1; }
+  .method-name { font-size: 14px; font-weight: 600; }
+  .method-desc { font-size: 11px; color: #64748b; }
+
+  .phone-input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; margin-top: 8px; }
+  .phone-input:focus { outline: none; border-color: #10b981; }
+
+  .btn-pay { width: 100%; background: #10b981; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .btn-pay:disabled { background: #94a3b8; cursor: not-allowed; }
+
+  .transaction-history { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .history-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+  .history-item:last-child { border-bottom: none; }
+  .history-info { font-size: 13px; }
+  .history-date { font-size: 11px; color: #94a3b8; }
+  .history-amount { font-size: 14px; font-weight: 700; color: #10b981; }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+  .nav-item.active { color: #10b981; }
+  .nav-icon { font-size: 20px; }
+
+  .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+  .modal.active { display: flex; }
+  .modal-content { background: white; border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; text-align: center; }
+  .modal-icon { font-size: 48px; margin-bottom: 16px; }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .modal-text { font-size: 14px; color: #64748b; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Wallet & Payment</h1>
+        <p id="userInfo">Loading...</p>
+      </div>
+    </div>
+
+    <div class="balance-card">
+      <div class="balance-label">Your Balance</div>
+      <div class="balance-value">🪙 <span id="coinBalance">0</span></div>
+      <div id="premiumStatus"></div>
+    </div>
+
+    <div class="section-title">Buy Coins</div>
+    <div class="section-subtitle">Use coins to unlock premium videos</div>
+
+    <div class="packs-grid">
+      <div class="pack-card" onclick="selectPack('coins-100', this)">
+        <div class="pack-coins">🪙 100</div>
+        <div class="pack-price">500 XAF</div>
+      </div>
+      <div class="pack-card" onclick="selectPack('coins-500', this)">
+        <div class="pack-coins">🪙 500</div>
+        <div class="pack-price">2,000 XAF</div>
+        <div class="pack-bonus">+50 Bonus</div>
+      </div>
+      <div class="pack-card" onclick="selectPack('coins-1000', this)">
+        <div class="pack-coins">🪙 1,000</div>
+        <div class="pack-price">3,500 XAF</div>
+        <div class="pack-bonus">+200 Bonus</div>
+      </div>
+      <div class="pack-card" onclick="selectPack('coins-2000', this)">
+        <div class="pack-coins">🪙 2,000</div>
+        <div class="pack-price">6,000 XAF</div>
+        <div class="pack-bonus">+500 Bonus</div>
+      </div>
+    </div>
+
+    <div class="premium-card" onclick="selectPack('premium', this)">
+      <div class="premium-title">👑 Premium Monthly</div>
+      <div class="premium-price">2,000 XAF/month</div>
+      <ul class="premium-features">
+        <li>Unlock all premium videos</li>
+        <li>No ads</li>
+        <li>Priority support</li>
+        <li>+100 coins monthly bonus</li>
+      </ul>
+    </div>
+
+    <div class="payment-methods">
+      <div class="section-title">Payment Method</div>
+      <div class="method-option selected" onclick="selectMethod('mtn', this)">
+        <div class="method-icon">📱</div>
+        <div class="method-info">
+          <div class="method-name">MTN Mobile Money</div>
+          <div class="method-desc">Pay with your MTN MoMo wallet</div>
+        </div>
+      </div>
+      <div class="method-option" onclick="selectMethod('orange', this)">
+        <div class="method-icon">🟠</div>
+        <div class="method-info">
+          <div class="method-name">Orange Money</div>
+          <div class="method-desc">Pay with Orange Money</div>
+        </div>
+      </div>
+      <div class="method-option" onclick="selectMethod('airtel', this)">
+        <div class="method-icon">🔴</div>
+        <div class="method-info">
+          <div class="method-name">Airtel Money</div>
+          <div class="method-desc">Pay with Airtel Money</div>
+        </div>
+      </div>
+
+      <input type="tel" class="phone-input" id="phoneNumber" placeholder="Enter MoMo number: 6XX XXX" required>
+    </div>
+
+    <button class="btn-pay" id="payBtn" onclick="processPayment()">Pay Now</button>
+
+    <div class="transaction-history" style="margin-top: 24px;">
+      <div class="section-title">Recent Transactions</div>
+      <div id="transactionList"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">✅</div>
+      <div class="modal-title">Payment Successful!</div>
+      <div class="modal-text" id="modalText">Your coins have been added to your wallet.</div>
+      <button class="btn-pay" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="payment.html" class="nav-item active">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    const country = localStorage.getItem('afrikexams_country') || 'Cameroon';
+    const lang = localStorage.getItem('afrikexams_lang') || 'en';
+    const studentName = localStorage.getItem('afrikexams_student_name') || 'Student';
+
+    document.getElementById('userInfo').textContent = `${studentName} • ${country}`;
+
+    // Load balance
+    function loadBalance() {
+      const coins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+      const isPremium = localStorage.getItem('afrikexams_is_premium') === 'true';
+      const premiumExpiry = localStorage.getItem('afrikexams_premium_expiry');
+
+      document.getElementById('coinBalance').textContent = coins;
+
+      if(isPremium && premiumExpiry && new Date(premiumExpiry) > new Date()) {
+        document.getElementById('premiumStatus').innerHTML = '<div class="premium-badge">👑 Premium Active</div>';
+      } else {
+        localStorage.setItem('afrikexams_is_premium', 'false');
+      }
+    }
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    let selectedPack = null;
+    let selectedMethod = 'mtn';
+
+    const packs = {
+      'coins-100': { coins: 100, price: 500 },
+      'coins-500': { coins: 550, price: 2000 },
+      'coins-1000': { coins: 1200, price: 3500 },
+      'coins-2000': { coins: 2500, price: 6000 },
+      'premium': { coins: 100, price: 2000, premium: true }
+    };
+
+    function selectPack(packId, element) {
+      document.querySelectorAll('.pack-card,.premium-card').forEach(c => c.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedPack = packId;
+      document.getElementById('payBtn').disabled = false;
+    }
+
+    function selectMethod(method, element) {
+      document.querySelectorAll('.method-option').forEach(m => m.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedMethod = method;
+    }
+
+    function processPayment() {
+      const phone = document.getElementById('phoneNumber').value.trim();
+
+      if(!selectedPack) {
+        toast('Please select a pack first');
+        return;
+      }
+
+      if(!phone || phone.length < 9) {
+        toast('Please enter a valid phone number');
+        return;
+      }
+
+      const pack = packs[selectedPack];
+
+      // Simulate MoMo payment
+      toast(`Sending ${pack.price} XAF request to ${phone}...`);
+
+      setTimeout(() => {
+        // Add coins
+        let currentCoins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+        currentCoins += pack.coins;
+        localStorage.setItem('afrikexams_coins', currentCoins);
+
+        // Activate premium if bought
+        if(pack.premium) {
+          const expiry = new Date();
+          expiry.setMonth(expiry.getMonth() + 1);
+          localStorage.setItem('afrikexams_is_premium', 'true');
+          localStorage.setItem('afrikexams_premium_expiry', expiry.toISOString());
+        }
+
+        // Save transaction
+        const transactions = JSON.parse(localStorage.getItem('afrikexams_transactions') || '[]');
+        transactions.unshift({
+          id: Date.now(),
+          item: selectedPack.includes('premium')? 'Premium Monthly' : `${pack.coins} Coins`,
+          amount: `+${pack.price} XAF`,
+          date: new Date().toLocaleDateString(),
+          method: selectedMethod
+        });
+        localStorage.setItem('afrikexams_transactions', JSON.stringify(transactions.slice(0, 5)));
+
+        // Show success
+        document.getElementById('modalText').textContent =
+          selectedPack.includes('premium')
+           ? `Premium activated! +${pack.coins} bonus coins added.`
+            : `+${pack.coins} coins added to your wallet!`;
+
+        document.getElementById('successModal').classList.add('active');
+        loadBalance();
+        loadTransactions();
+      }, 2000);
+    }
+
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('active');
+      document.getElementById('phoneNumber').value = '';
+      selectedPack = null;
+      document.querySelectorAll('.pack-card,.premium-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('payBtn').disabled = true;
+    }
+
+    function loadTransactions() {
+      const transactions = JSON.parse(localStorage.getItem('afrikexams_transactions') || '[]');
+      const list = document.getElementById('transactionList');
+
+      if(transactions.length === 0) {
+        list.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No transactions yet</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      transactions.forEach(tx => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `
+          <div>
+            <div class="history-info">${tx.item}</div>
+            <div class="history-date">${tx.date} • ${tx.method.toUpperCase()}</div>
+          </div>
+          <div class="history-amount">${tx.amount}</div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // Init
+    loadBalance();
+    loadTransactions();
+    document.getElementById('payBtn').disabled = true;
+  </script>
+</body>
+</html>

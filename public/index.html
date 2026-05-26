@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.T-STORE | Africa's Education Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #10b981;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+  }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+  body { background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
+.logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; color: var(--primary); }
+.logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.nav-actions { display: flex; gap: 12px; align-items: center; }
+  select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); font-weight: 500; cursor: pointer; }
+
+  /* Hero */
+.hero { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); color: white; padding: 80px 0; border-radius: 0 0 32px 32px; }
+.hero-content { max-width: 650px; }
+.badge { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 50px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; }
+.hero h1 { font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+.hero p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; }
+.btn { padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 15px; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: white; color: var(--primary); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-ghost { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+.btn-ghost:hover { background: rgba(255,255,255,0.2); }
+.trust-row { display: flex; gap: 32px; margin-top: 40px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 8px; font-size: 14px; opacity: 0.9; }
+
+  /* Stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: -60px 0 64px; position: relative; z-index: 10; }
+.stat-card { background: var(--card); padding: 28px; border-radius: 20px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); text-align: center; }
+.stat-card h3 { font-size: 36px; font-weight: 800; color: var(--primary); }
+.stat-card p { color: var(--text-light); font-weight: 500; }
+
+  /* Section */
+.section { margin: 64px 0; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.section-header h2 { font-size: 32px; font-weight: 800; }
+.link { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+  /* Form Card */
+.form-card { background: var(--card); padding: 48px; border-radius: 24px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+.form-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 24px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  label { font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block; }
+  input, textarea, select.form-select { padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; width: 100%; background: var(--bg); transition: all 0.2s; }
+  input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+.btn-submit { background: var(--primary); color: white; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; width: 100%; margin-top: 24px; }
+.btn-submit:hover { background: var(--primary-dark); }
+
+  /* Login Box */
+.login-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; padding: 28px; border-radius: 16px; text-align: center; margin-bottom: 24px; }
+.btn-warning { background: #f59e0b; color: white; padding: 12px 24px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; margin-top: 12px; }
+
+  /* Marketplace Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; }
+.card { background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); transition: all 0.3s; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.card-img { width: 100%; height: 220px; object-fit: cover; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); }
+.card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.card-badge { background: var(--primary); color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 12px; }
+.card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.card p { color: var(--text-light); font-size: 14px; margin-bottom: 16px; flex: 1; }
+.price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.price { font-size: 24px; font-weight: 800; color: var(--accent); }
+.earnings { font-size: 12px; color: var(--text-light); }
+.meta { font-size: 13px; color: var(--text-light); display: flex; align-items: center; gap: 6px; }
+.btn-buy { background: var(--accent); color: white; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; width: 100%; }
+.btn-buy:hover { background: #059669; }
+.teacher-badge { background: var(--accent); color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+.img-preview { width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; margin-top: 12px; display: none; border: 2px dashed var(--border); }
+
+  /* Modal */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal.active { display: flex; }
+.modal-content { background: var(--card); border-radius: 24px; max-width: 500px; width: 100%; padding: 40px; box-shadow: var(--shadow-lg); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.modal-header h3 { font-size: 24px; font-weight: 800; }
+.close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-light); }
+.checkout-item { display: flex; gap: 16px; padding: 20px; background: var(--bg); border-radius: 16px; margin-bottom: 24px; }
+.checkout-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; }
+.breakdown { border-top: 1px solid var(--border); padding-top: 20px; margin-bottom: 24px; }
+.breakdown-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
+.breakdown-row.total { font-weight: 800; font-size: 18px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.trust-badge { background: #dcfce7; color: #166534; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+.btn-paystack { background: #011B33; color: white; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-paystack:hover { background: #002244; }
+
+  @media (max-width: 768px) {
+  .hero h1 { font-size: 36px; }
+  .hero { padding: 48px 0; }
+  .form-card { padding: 24px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .stats { margin-top: 20px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav class="nav">
+        <div class="logo">
+          <div class="logo-icon">S.T</div>
+          <span id="siteTitle">S.T-STORE</span>
+        </div>
+        <div class="nav-actions">
+          <select id="langSelect" onchange="setLang(this.value)">
+            <option value="en">🇬🇧 EN</option>
+            <option value="fr">🇫🇷 FR</option>
+          </select>
+          <select id="country" onchange="updateCurrency()">
+            <option value="">Country</option>
+            <option>Nigeria</option><option>Cameroon</option><option>Ghana</option><option>Kenya</option>
+            <option>South Africa</option><option>Uganda</option><option>Tanzania</option><option>Senegal</option>
+            <option>Cote d'Ivoire</option><option>Egypt</option><option>Morocco</option>
+          </select>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="badge" id="badge">🌍 55 African Countries</span>
+        <h1 id="heroTitle">The Student-Teacher Marketplace</h1>
+        <p id="heroDesc">Buy verified study materials. Sell your resources. Secure payments, instant delivery, 0 direct contact. We handle everything.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="scrollToSection('marketplace')" id="browseBtn">Browse Marketplace</button>
+          <button class="btn btn-ghost" onclick="openTeacherSignup()">👨‍🏫 Become a Teacher</button>
+        </div>
+        <div class="trust-row">
+          <div class="trust-item">🔒 Secure Payments</div>
+          <div class="trust-item">⚡ Instant Delivery</div>
+          <div class="trust-item">🛡️ 40/60 Revenue Share</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card"><h3>120K+</h3><p id="stat1">Resources Sold</p></div>
+      <div class="stat-card"><h3>50K+</h3><p id="stat2">Verified Teachers</p></div>
+      <div class="stat-card"><h3>55</h3><p id="stat3">Countries</p></div>
+      <div class="stat-card"><h3>4.9★</h3><p id="stat4">Trust Rating</p></div>
+    </div>
+
+    <section class="section" id="sell">
+      <div class="form-card">
+        <h2 id="addTitle">📚 List Your Resource</h2>
+
+        <div id="loginPrompt" class="login-box">
+          <p id="loginText">Complete teacher verification to start earning 60% revenue</p>
+          <button class="btn-warning" onclick="openTeacherSignup()" id="signupBtn">Verify Teacher Account</button>
+        </div>
+
+        <div id="postForm" style="display:none;">
+          <div class="form-grid">
+            <div>
+              <label id="typeLabel">Resource Type</label>
+              <select id="type" class="form-select">
+                <option value="Textbook" data-en="Textbook" data-fr="Manuel Scolaire">Textbook</option>
+                <option value="Past Question" data-en="Past Question" data-fr="Ancienne Épreuve">Past Question</option>
+                <option value="Lesson" data-en="Lesson" data-fr="Cours">Lesson</option>
+                <option value="Study Material" data-en="Study Material" data-fr="Matériel d'Étude">Study Material</option>
+              </select>
+            </div>
+            <div>
+              <label id="titleLabel">Title</label>
+              <input id="titleInput" placeholder="WAEC Physics 2020" />
+            </div>
+            <div style="grid-column: 1/-1;">
+              <label id="descLabel">Description</label>
+              <textarea id="desc" placeholder="What students will learn from this resource" rows="3"></textarea>
+            </div>
+            <div>
+              <label id="imageLabel">Cover Image</label>
+              <input id="imageUpload" type="file" accept="image/*" onchange="previewImage(event)" />
+              <img id="imgPreview" class="img-preview" />
+            </div>
+            <div>
+              <label id="priceLabel">Selling Price</label>
+              <input id="price" type="number" placeholder="Enter price" oninput="calcEarnings()" />
+              <div class="earnings" id="earningsText">You earn: $0.00</div>
+            </div>
+          </div>
+          <button class="btn-submit" id="postBtn" onclick="addItem()">Publish Resource</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="marketplace">
+      <div class="section-header">
+        <h2 id="marketTitle">Marketplace</h2>
+        <a href="#" class="link" id="seeAll">View All Resources</a>
+      </div>
+      <div id="list" class="grid">
+        <p style="text-align:center; color: var(--text-light); grid-column: 1/-1; padding: 60px;">No resources yet. Be the first verified teacher to publish!</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="checkoutTitle">Complete Purchase</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="checkoutBody"></div>
+    </div>
+  </div>
+
+<script>
+  let items = JSON.parse(localStorage.getItem('ststore_items_pro') || '[]');
+  let currentLang = localStorage.getItem('ststore_lang') || 'en';
+  let isTeacher = localStorage.getItem('ststore_teacher') === 'true';
+  let teacherName = localStorage.getItem('ststore_teacher_name') || '';
+  let currentImage = '';
+  let selectedItem = null;
+
+  const t = {
+    en: {
+      siteTitle: "S.T-STORE", badge: "🌍 55 African Countries", heroTitle: "The Student-Teacher Marketplace",
+      heroDesc: "Buy verified study materials. Sell your resources. Secure payments, instant delivery, 0 direct contact. We handle everything.",
+      browseBtn: "Browse Marketplace", stat1: "Resources Sold", stat2: "Verified Teachers", stat3: "Countries", stat4: "Trust Rating",
+      addTitle: "📚 List Your Resource", marketTitle: "Marketplace", seeAll: "View All Resources", postBtn: "Publish Resource",
+      selectCountry: "Country", enterPrice: "Enter price", priceLabel: "Selling Price", typeLabel: "Resource Type",
+      titleLabel: "Title", descLabel: "Description", imageLabel: "Cover Image", noItems: "No resources yet. Be the first verified teacher to publish!",
+      fillFields: "Please complete all required fields", titlePlaceholder: "WAEC Physics 2020", descPlaceholder: "What students will learn from this resource",
+      loginText: "Complete teacher verification to start earning 60% revenue", signupBtn: "Verify Teacher Account",
+      teacherName: "Full Name", teacherEmail: "Email Address", joinTeacher: "Welcome Teacher",
+      checkoutTitle: "Complete Purchase", buyNow: "Buy Now", youPay: "You Pay", platformFee: "Platform Fee 40%", teacherEarnings: "Teacher Earns 60%",
+      secureCheckout: "🔒 Secure checkout powered by Paystack", payNow: "Pay Now with Paystack", purchased: "Purchase Successful! Check your downloads."
+    },
+    fr: {
+      siteTitle: "S.T-STORE", badge: "🌍 55 Pays Africains", heroTitle: "La Marketplace Étudiant-Enseignant",
+      heroDesc: "Achetez du matériel vérifié. Vendez vos ressources. Paiements sécurisés, livraison instantanée, 0 contact direct. Nous gérons tout.",
+      browseBtn: "Parcourir le Marché", stat1: "Ressources Vendues", stat2: "Enseignants Vérifiés", stat3: "Pays", stat4: "Note de Confiance",
+      addTitle: "📚 Publier votre Ressource", marketTitle: "Marché", seeAll: "Voir Toutes les Ressources", postBtn: "Publier",
+      selectCountry: "Pays", enterPrice: "Entrez le prix", priceLabel: "Prix de Vente", typeLabel: "Type de Ressource",
+      titleLabel: "Titre", descLabel: "Description", imageLabel: "Image de Couverture", noItems: "Aucune ressource. Soyez le premier enseignant vérifié à publier!",
+      fillFields: "Veuillez remplir tous les champs requis", titlePlaceholder: "BAC Physique 2020", descPlaceholder: "Ce que les étudiants apprendront",
+      loginText: "Vérifiez votre compte pour gagner 60% de revenus", signupBtn: "Vérifier Compte Enseignant",
+      teacherName: "Nom Complet", teacherEmail: "Adresse Email", joinTeacher: "Bienvenue Enseignant",
+      checkoutTitle: "Finaliser l'Achat", buyNow: "Acheter", youPay: "Vous Payez", platformFee: "Frais Plateforme 40%", teacherEarnings: "Enseignant Reçoit 60%",
+      secureCheckout: "🔒 Paiement sécurisé par Paystack", payNow: "Payer avec Paystack", purchased: "Achat Réussi! Vérifiez vos téléchargements."
+    }
+  };
+
+  const currencyMap = {
+    "Nigeria": {code: "NGN", symbol: "₦", rate: 1}, "Cameroon": {code: "XAF", symbol: "FCFA", rate: 1},
+    "Ghana": {code: "GHS", symbol: "₵", rate: 1}, "Kenya": {code: "KES", symbol: "KSh", rate: 1},
+    "South Africa": {code: "ZAR", symbol: "R", rate: 1}, "Uganda": {code: "UGX", symbol: "USh", rate: 1},
+    "Tanzania": {code: "TZS", symbol: "TSh", rate: 1}, "Senegal": {code: "XOF", symbol: "CFA", rate: 1},
+    "Cote d'Ivoire": {code: "XOF", symbol: "CFA", rate: 1}, "Egypt": {code: "EGP", symbol: "£", rate: 1},
+    "Morocco": {code: "MAD", symbol: "MAD", rate: 1}
+  };
+
+  function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior: 'smooth'}); }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('ststore_lang', lang);
+    document.getElementById('langSelect').value = lang;
+    const langT = t;
+
+    Object.keys(langT).forEach(key => {
+      const el = document.getElementById(key);
+      if (el) el.textContent = langT[key];
+    });
+    document.getElementById('addTitle').innerHTML = langT.addTitle + (isTeacher? ` <span class="teacher-badge">${teacherName}</span>` : '');
+
+    document.querySelectorAll('option[data-en]').forEach(opt => {
+      opt.textContent = opt.getAttribute(`data-${lang}`);
+    });
+
+    updateCurrency();
+    render();
+  }
+
+  function updateCurrency() {
+    const country = document.getElementById('country').value;
+    const priceInput = document.getElementById('price');
+    const priceLabel = document.getElementById('priceLabel');
+    const langT = t[currentLang];
+
+    if (currencyMap[country]) {
+      const curr = currencyMap[country];
+      priceLabel.textContent = `${langT.priceLabel} (${curr.code})`;
+      priceInput.placeholder = `${langT.enterPrice} ${curr.code}`;
+    } else {
+      priceLabel.textContent = langT.priceLabel;
+      priceInput.placeholder = langT.enterPrice;
+    }
+    calcEarnings();
+  }
+
+  function calcEarnings() {
+    const price = parseFloat(document.getElementById('price').value) || 0;
+    const earnings = (price * 0.6).toFixed(2);
+    document.getElementById('earningsText').textContent = `${t[currentLang].teacherEarnings.split(' ')[0]}: ${currencyMap[document.getElementById('country').value]?.symbol || '$'}${earnings}`;
+  }
+
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        currentImage = e.target.result;
+        document.getElementById('imgPreview').src = currentImage;
+        document.getElementById('imgPreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function openTeacherSignup() {
+    const langT = t[currentLang];
+    const name = prompt(langT.teacherName);
+    const email = prompt(langT.teacherEmail);
+    if (name && email && email.includes('@')) {
+      localStorage.setItem('ststore_teacher', 'true');
+      localStorage.setItem('ststore_teacher_name', name);
+      isTeacher = true;
+      teacherName = name;
+      checkTeacherStatus();
+      alert(`${langT.joinTeacher}: ${name}`);
+    }
+  }
+
+  function checkTeacherStatus() {
+    if (isTeacher) {
+      document.getElementById('loginPrompt').style.display = 'none';
+      document.getElementById('postForm').style.display = 'block';
+      document.getElementById('addTitle').innerHTML = `${t[currentLang].addTitle} <span class="teacher-badge">${teacherName}</span>`;
+    } else {
+      document.getElementById('loginPrompt').style.display = 'block';
+      document.getElementById('postForm').style.display = 'none';
+    }
+  }
+
+  function render() {
+    const list = document.getElementById('list');
+    const langT = t[currentLang];
+    if (items.length === 0) {
+      list.innerHTML = `<p style="text-align:center; color: var(--text-light); grid-column: 1/-1; padding: 60px;">${langT.noItems}</p>`;
+      return;
+    }
+    list.innerHTML = items.map(item => {
+      const teacherEarn = (item.price * 0.6).toFixed(2);
+      return `
+      <div class="card">
+        ${item.image? `<img src="${item.image}" class="card-img" alt="${item.title}" />` : `<div class="card-img"></div>`}
+        <div class="card-body">
+          <span class="card-badge">${item.type}</span>
+          <h3>${item.title}</h3>
+          <p>${item.desc || ''}</p>
+          <div class="price-row">
+            <div>
+              <div class="price">${item.currencySymbol}${item.price}</div>
+              <div class="earnings">${langT.teacherEarnings}: ${item.currencySymbol}${teacherEarn}</div>
+            </div>
+            <div class="meta">📍 ${item.country}</div>
+          </div>
+          <button class="btn-buy" onclick='openCheckout(${JSON.stringify(item).replace(/'/g, "&apos;")})'>${langT.buyNow}</button>
+        </div>
+      </div>
+    `}).join('');
+  }
+
+  function addItem() {
+    const type = document.getElementById('type').value;
+    const title = document.getElementById('titleInput').value.trim();
+    const desc = document.getElementById('desc').value.trim();
+    const price = parseFloat(document.getElementById('price').value);
+    const country = document.getElementById('country').value;
+    const langT = t[currentLang];
+
+    if (!title ||!price ||!country || price <= 0) {
+      alert(langT.fillFields);
+      return;
+    }
+
+    const curr = currencyMap[country] || {code: "USD", symbol: "$"};
+    items.unshift({
+      type, title, desc, price, country, seller: teacherName,
+      currencyCode: curr.code, currencySymbol: curr.symbol,
+      image: currentImage, id: Date.now()
+    });
+    localStorage.setItem('ststore_items_pro', JSON.stringify(items));
+
+    ['titleInput','desc','price','imageUpload'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('imgPreview').style.display = 'none';
+    currentImage = '';
+    calcEarnings();
+    render();
+    scrollToSection('marketplace');
+  }
+
+  function openCheckout(item) {
+    selectedItem = item;
+    const langT = t[currentLang];
+    const teacherEarn = (item.price * 0.6).toFixed(2);
+    const platformFee = (item.price * 0.4).toFixed(2);
+
+    document.getElementById('checkoutBody').innerHTML = `
+      <div class="checkout-item">
+        ${item.image? `<img src="${item.image}" alt="${item.title}" />` : `<div style="width:80px;height:80px;background:var(--border);border-radius:12px;"></div>`}
+        <div>
+          <h4 style="font-weight:700; margin-bottom:4px;">${item.title}</h4>
+          <p style="color:var(--text-light); font-size:14px;">${item.type} • ${item.country}</p>
+        </div>
+      </div>
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span>${langT.youPay}</span>
+          <span>${item.currencySymbol}${item.price}</span>
+        </div>
+        <div class="breakdown-row" style="color:var(--text-light);">
+          <span>${langT.platformFee}</span>
+          <span>-${item.currencySymbol}${platformFee}</span>
+        </div>
+        <div class="breakdown-row" style="color:var(--accent);">
+          <span>${langT.teacherEarnings}</span>
+          <span>+${item.currencySymbol}${teacherEarn}</span>
+        </div>
+        <div class="breakdown-row total">
+          <span>Total</span>
+          <span>${item.currencySymbol}${item.price}</span>
+        </div>
+      </div>
+      <div class="trust-badge">${langT.secureCheckout}</div>
+      <button class="btn-paystack" onclick="processPayment()">💳 ${langT.payNow}</button>
+    `;
+    document.getElementById('checkoutModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('checkoutModal').classList.remove('active');
+  }
+
+  function processPayment() {
+    const langT = t[currentLang];
+    // Here you would integrate Paystack:
+    // 1. Create transaction via backend
+    // 2. Paystack handles payment
+    // 3. Webhook splits 60% to teacher bank account via Paystack Payout
+    alert(langT.purchased);
+    closeModal();
+  }
+
+  window.onclick = function(event) {
+    if (event.target == document.getElementById('checkoutModal')) {
+      closeModal();
+    }
+  }
+
+  checkTeacherStatus();
+  setLang(currentLang);
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Upload Question</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+    .container { padding: 20px 16px; }
+
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header-text h1 { font-size: 20px; font-weight: 700; }
+    .header-text p { font-size: 12px; color: #64748b; }
+
+    .form-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-family: inherit; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #10b981; }
+    .form-textarea { min-height: 100px; resize: vertical; }
+
+    .options-grid { display: grid; gap: 8px; }
+    .option-row { display: flex; gap: 8px; align-items: center; }
+    .option-input { flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+    .option-radio { width: 20px; height: 20px; accent-color: #10b981; }
+
+    .btn-primary { width: 100%; background: #10b981; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .btn-primary:hover { background: #059669; }
+
+    .btn-secondary { width: 100%; background: white; color: #10b981; border: 2px solid #10b981; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+
+    .uploaded-list { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .list-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+    .question-item { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 8px; }
+    .question-text { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .question-meta { font-size: 11px; color: #64748b; display: flex; gap: 12px; }
+    .delete-btn { background: #fee2e2; color: #ef4444; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 8px; }
+
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+    .nav-item.active { color: #10b981; }
+    .nav-icon { font-size: 20px; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='teacher-dashboard.html'">←</button>
+      <div class="header-text">
+        <h1>Upload Question</h1>
+        <p id="teacherInfo">Loading...</p>
+      </div>
+    </div>
+
+    <form class="form-card" id="questionForm">
+      <div class="form-group">
+        <label class="form-label">Question Type</label>
+        <select class="form-select" id="questionType" required>
+          <option value="practice">Practice Question</option>
+          <option value="exam">Mock Exam Question</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select class="form-select" id="subject" required>
+          <option value="Mathematics">Mathematics</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Biology">Biology</option>
+          <option value="English">English</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Difficulty</label>
+        <select class="form-select" id="difficulty" required>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Question</label>
+        <textarea class="form-textarea" id="questionText" placeholder="Enter your question here..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Options - Select the correct answer</label>
+        <div class="options-grid">
+          <div class="option-row">
+            <input type="radio" name="correct" value="0" class="option-radio" required>
+            <input type="text" class="option-input" id="option0" placeholder="Option A" required>
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correct" value="1" class="option-radio">
+            <input type="text" class="option-input" id="option1" placeholder="Option B" required>
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correct" value="2" class="option-radio">
+            <input type="text" class="option-input" id="option2" placeholder="Option C" required>
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correct" value="3" class="option-radio">
+            <input type="text" class="option-input" id="option3" placeholder="Option D" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Explanation - Optional</label>
+        <textarea class="form-textarea" id="explanation" placeholder="Explain why the answer is correct..." style="min-height: 60px;"></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary">Upload Question</button>
+      <button type="button" class="btn-secondary" onclick="clearForm()">Clear Form</button>
+    </form>
+
+    <div class="uploaded-list">
+      <div class="list-title">Your Uploaded Questions (<span id="questionCount">0</span>)</div>
+      <div id="questionsList"></div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="teacher-dashboard.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="upload-question.html" class="nav-item active">
+      <div class="nav-icon">➕</div>
+      <div>Upload</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Messages coming soon')">
+      <div class="nav-icon">💬</div>
+      <div>Messages</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Settings coming soon')">
+      <div class="nav-icon">⚙️</div>
+      <div>Settings</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if teacher is logged in
+    const teacherLoggedIn = localStorage.getItem('afrikexams_teacher_logged_in');
+    const teacherName = localStorage.getItem('afrikexams_teacher_name') || 'Teacher';
+    const teacherCountry = localStorage.getItem('afrikexams_teacher_country') || 'Cameroon';
+
+    if(!teacherLoggedIn) {
+      alert('Please login first');
+      window.location.href = 'auth.html';
+    }
+
+    document.getElementById('teacherInfo').textContent = `Logged in as ${teacherName} • ${teacherCountry}`;
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Load questions
+    function loadQuestions() {
+      const questions = JSON.parse(localStorage.getItem('afrikexams_questions') || '[]');
+      const teacherQuestions = questions.filter(q => q.teacher === teacherName);
+      
+      document.getElementById('questionCount').textContent = teacherQuestions.length;
+
+      const list = document.getElementById('questionsList');
+      if(teacherQuestions.length === 0) {
+        list.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No questions uploaded yet</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      teacherQuestions.reverse().forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'question-item';
+        item.innerHTML = `
+          <div class="question-text">${q.question.substring(0, 80)}${q.question.length > 80 ? '...' : ''}</div>
+          <div class="question-meta">
+            <span>${q.type}</span>
+            <span>${q.subject}</span>
+            <span>${q.difficulty}</span>
+            <span>${q.country}</span>
+          </div>
+          <button class="delete-btn" onclick="deleteQuestion(${q.id})">Delete</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // Submit form
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const questions = JSON.parse(localStorage.getItem('afrikexams_questions') || '[]');
+      
+      const newQuestion = {
+        id: Date.now(),
+        teacher: teacherName,
+        type: document.getElementById('questionType').value,
+        subject: document.getElementById('subject').value,
+        difficulty: document.getElementById('difficulty').value,
+        country: teacherCountry,
+        language: localStorage.getItem('afrikexams_lang') || 'en',
+        question: document.getElementById('questionText').value,
+        options: [
+          document.getElementById('option0').value,
+          document.getElementById('option1').value,
+          document.getElementById('option2').value,
+          document.getElementById('option3').value
+        ],
+        correct: parseInt(document.querySelector('input[name="correct"]:checked').value),
+        explanation: document.getElementById('explanation').value,
+        createdAt: new Date().toISOString()
+      };
+
+      questions.push(newQuestion);
+      localStorage.setItem('afrikexams_questions', JSON.stringify(questions));
+
+      // Update teacher stats
+      const totalQuestions = questions.length;
+      localStorage.setItem('afrikexams_total_questions', totalQuestions);
+
+      toast('Question uploaded successfully! ✅');
+      clearForm();
+      loadQuestions();
+    });
+
+    function clearForm() {
+      document.getElementById('questionForm').reset();
+    }
+
+    function deleteQuestion(id) {
+      if(!confirm('Delete this question?')) return;
+      
+      let questions = JSON.parse(localStorage.getItem('afrikexams_questions') || '[]');
+      questions = questions.filter(q => q.id !== id);
+      localStorage.setItem('afrikexams_questions', JSON.stringify(questions));
+      localStorage.setItem('afrikexams_total_questions', questions.length);
+      
+      toast('Question deleted');
+      loadQuestions();
+    }
+
+    // Load on start
+    loadQuestions();
+  </script>
+</body>
+</html>

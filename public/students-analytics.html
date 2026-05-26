@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Student Analytics</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+   .container { padding: 20px 16px; }
+
+   .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+   .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+   .header-text h1 { font-size: 20px; font-weight: 700; }
+   .header-text p { font-size: 12px; color: #64748b; }
+
+   .stats-overview { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+   .stat-box { background: white; border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+   .stat-value { font-size: 20px; font-weight: 800; color: #10b981; }
+   .stat-label { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+   .search-bar { background: white; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+   .search-input { flex: 1; border: none; outline: none; font-size: 14px; background: transparent; }
+   .search-icon { font-size: 18px; color: #94a3b8; }
+
+   .filter-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; }
+   .filter-tab { padding: 8px 16px; border-radius: 20px; background: white; border: 2px solid #e2e8f0; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+   .filter-tab.active { background: #10b981; color: white; border-color: #10b981; }
+
+   .student-list { display: flex; flex-direction: column; gap: 12px; }
+   .student-card { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; }
+   .student-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+   .student-name { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+   .student-badge { font-size: 10px; padding: 3px 8px; border-radius: 12px; background: #dcfce7; color: #166534; }
+   .student-badge.at-risk { background: #fee2e2; color: #991b1b; }
+
+   .student-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+   .student-stat { text-align: center; }
+   .student-stat-value { font-size: 14px; font-weight: 700; }
+   .student-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+   .weak-subject { margin-top: 10px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #64748b; }
+   .weak-subject strong { color: #ef4444; }
+
+   .empty-state { text-align: center; padding: 40px 20px; color: #94a3b8; }
+   .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+   .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+   .nav-item.active { color: #10b981; }
+   .nav-icon { font-size: 20px; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='teacher-dashboard.html'">←</button>
+      <div class="header-text">
+        <h1>Student Analytics</h1>
+        <p id="teacherInfo">Loading...</p>
+      </div>
+    </div>
+
+    <div class="stats-overview">
+      <div class="stat-box">
+        <div class="stat-value" id="totalStudents">0</div>
+        <div class="stat-label">Total Students</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="avgScore">0%</div>
+        <div class="stat-label">Avg Score</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="activeToday">0</div>
+        <div class="stat-label">Active Today</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-icon">🔍</div>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search student name..." oninput="filterStudents()">
+    </div>
+
+    <div class="filter-tabs">
+      <div class="filter-tab active" onclick="setFilter('all', this)">All</div>
+      <div class="filter-tab" onclick="setFilter('top', this)">Top Performers</div>
+      <div class="filter-tab" onclick="setFilter('at-risk', this)">At Risk</div>
+      <div class="filter-tab" onclick="setFilter('streak', this)">🔥 Streak</div>
+    </div>
+
+    <div class="student-list" id="studentList"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="teacher-dashboard.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="upload-question.html" class="nav-item">
+      <div class="nav-icon">➕</div>
+      <div>Upload</div>
+    </a>
+    <a href="student-analytics.html" class="nav-item active">
+      <div class="nav-icon">📊</div>
+      <div>Students</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Settings coming soon')">
+      <div class="nav-icon">⚙️</div>
+      <div>Settings</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if teacher is logged in
+    const teacherLoggedIn = localStorage.getItem('afrikexams_teacher_logged_in');
+    const teacherName = localStorage.getItem('afrikexams_teacher_name') || 'Teacher';
+    const teacherCountry = localStorage.getItem('afrikexams_teacher_country') || 'Cameroon';
+
+    if(!teacherLoggedIn) {
+      alert('Please login first');
+      window.location.href = 'auth.html';
+    }
+
+    document.getElementById('teacherInfo').textContent = `${teacherCountry} • ${teacherName}`;
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Mock student data - in real app this comes from backend
+    // For demo, we generate students based on leaderboard + add random stats
+    function generateMockStudents() {
+      const baseStudents = [
+        { name: 'Sarah M.', country: teacherCountry },
+        { name: 'David K.', country: teacherCountry },
+        { name: 'Aisha L.', country: teacherCountry },
+        { name: 'Paul N.', country: teacherCountry },
+        { name: 'Grace W.', country: teacherCountry },
+        { name: 'Emmanuel T.', country: teacherCountry },
+        { name: 'Fatima B.', country: teacherCountry },
+        { name: 'John D.', country: teacherCountry }
+      ];
+
+      return baseStudents.map((s, idx) => {
+        const score = Math.floor(Math.random() * 40) + 60; // 60-100
+        const streak = Math.floor(Math.random() * 14);
+        const coins = Math.floor(Math.random() * 500) + 50;
+        const weakSubjects = ['Algebra', 'Physics', 'Chemistry', 'Biology', 'English'];
+        const weakSubject = weakSubjects[Math.floor(Math.random() * weakSubjects.length)];
+        const lastActive = Math.floor(Math.random() * 3); // 0=today, 1=yesterday, 2=2 days ago
+
+        return {
+          id: idx + 1,
+          name: s.name,
+          score: score,
+          streak: streak,
+          coins: coins,
+          weakSubject: weakSubject,
+          lastActive: lastActive,
+          questionsAnswered: Math.floor(Math.random() * 200) + 50,
+          atRisk: score < 70
+        };
+      });
+    }
+
+    let allStudents = generateMockStudents();
+    let currentFilter = 'all';
+
+    // Update top stats
+    function updateStats() {
+      document.getElementById('totalStudents').textContent = allStudents.length;
+      const avg = Math.round(allStudents.reduce((sum, s) => sum + s.score, 0) / allStudents.length);
+      document.getElementById('avgScore').textContent = avg + '%';
+      const activeToday = allStudents.filter(s => s.lastActive === 0).length;
+      document.getElementById('activeToday').textContent = activeToday;
+    }
+
+    // Render students
+    function renderStudents(students) {
+      const list = document.getElementById('studentList');
+      
+      if(students.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <div>No students found</div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = '';
+      students.forEach(student => {
+        const card = document.createElement('div');
+        card.className = 'student-card';
+        card.onclick = () => viewStudent(student.id);
+        
+        const lastActiveText = student.lastActive === 0 ? 'Today' : 
+                               student.lastActive === 1 ? 'Yesterday' : 
+                               `${student.lastActive} days ago`;
+
+        card.innerHTML = `
+          <div class="student-header">
+            <div class="student-name">
+              ${student.name}
+              ${student.streak >= 7 ? '<span class="student-badge">🔥 ' + student.streak + '</span>' : ''}
+              ${student.atRisk ? '<span class="student-badge at-risk">At Risk</span>' : ''}
+            </div>
+            <div style="font-size: 11px; color: #94a3b8;">${lastActiveText}</div>
+          </div>
+          <div class="student-stats">
+            <div

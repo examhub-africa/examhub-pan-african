@@ -1,0 +1,25 @@
+// Load videos from teacher uploads
+const allVideos = JSON.parse(localStorage.getItem('afrikexams_videos') || '[]');
+const countryVideos = allVideos.filter(v => v.country === country && v.language === lang);
+
+// Convert to format videos.html expects
+const videosByLang = {
+  en: countryVideos.map(v => ({
+    id: v.id,
+    title: v.title,
+    duration: v.duration,
+    views: v.views + ' views',
+    premium: v.type === 'premium',
+    desc: v.description,
+    youtubeId: v.youtubeId
+  })),
+  fr: countryVideos.map(v => ({
+    id: v.id,
+    title: v.title,
+    duration: v.duration,
+    views: v.views + ' views',
+    premium: v.type === 'premium',
+    desc: v.description,
+    youtubeId: v.youtubeId
+  }))
+};

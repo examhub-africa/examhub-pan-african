@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Video Lessons</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+    .container { padding: 20px 16px; }
+
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header-text h1 { font-size: 20px; font-weight: 700; }
+    .header-text p { font-size: 12px; color: #64748b; }
+
+    .info-bar { background: white; padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .info-item { text-align: center; }
+    .info-label { font-size: 11px; color: #94a3b8; }
+    .info-value { font-size: 14px; font-weight: 600; }
+
+    .video-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; cursor: pointer; }
+    .video-thumb { width: 100%; height: 180px; background: linear-gradient(135deg, #fee2e2, #fecaca); display: flex; align-items: center; justify-content: center; font-size: 48px; position: relative; }
+    .play-icon { position: absolute; width: 56px; height: 56px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #ef4444; }
+    .video-info { padding: 16px; }
+    .video-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .video-meta { display: flex; gap: 12px; font-size: 12px; color: #64748b; margin-bottom: 8px; }
+    .video-desc { font-size: 13px; color: #64748b; line-height: 1.4; }
+    .video-badge { display: inline-block; background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; margin-top: 8px; }
+    .video-badge.premium { background: #fef3c7; color: #78350f; }
+
+    .streak { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #78350f; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+    .nav-item.active { color: #10b981; }
+    .nav-icon { font-size: 20px; }
+
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 480px; overflow: hidden; }
+    .modal-video { width: 100%; height: 220px; background: #000; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
+    .modal-body { padding: 16px; }
+    .modal-close { background: #ef4444; color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="streakBadge" class="streak">🔥 <span id="streakCount">0</span></div>
+
+  <!-- Video Player Modal -->
+  <div id="videoModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-video" id="modalVideo">📹 Video Player<br>Demo Mode</div>
+      <div class="modal-body">
+        <div class="video-title" id="modalTitle"></div>
+        <div class="video-desc" id="modalDesc"></div>
+        <button class="modal-close" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Video Lessons</h1>
+        <p id="subjectText">Loading...</p>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-item">
+        <div class="info-label">Country</div>
+        <div class="info-value" id="countryDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Language</div>
+        <div class="info-value" id="langDisplay">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Watched</div>
+        <div class="info-value"><span id="watched">0</span></div>
+      </div>
+    </div>
+
+    <div id="videosList"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Payment page coming soon')">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if user picked country + language
+    const country = localStorage.getItem('afrikexams_country');
+    const lang = localStorage.getItem('afrikexams_lang');
+
+    if(!country || !lang) {
+      alert('Please select country and language first');
+      window.location.href = 'index.html';
+    }
+
+    // Display selection
+    document.getElementById('countryDisplay').textContent = country;
+    document.getElementById('langDisplay').textContent = lang === 'en' ? 'English' : 'Français';
+    document.getElementById('subjectText').textContent = `Video lessons for ${country}`;
+
+    // Daily streak
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem('afrikexams_last_visit');
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '0');
+
+      if(lastVisit !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if(lastVisit === yesterday.toDateString()) {
+          streak += 1;
+        } else {
+          streak = 1;
+        }
+        localStorage.setItem('afrikexams_streak', streak);
+        localStorage.setItem('afrikexams_last_visit', today);
+      }
+
+      document.getElementById('streakCount').textContent = streak;
+    }
+    updateStreak();
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Video data by country + language
+    const videosByLang = {
+      en: [
+        { id: 1, title: "Algebra Basics - Linear Equations", duration: "12:34", views: "15K", premium: false, desc: "Learn how to solve linear equations step by step. Perfect for GCE/WAEC prep." },
+        { id: 2, title: "Biology: Cell Structure", duration: "18:20", views: "22K", premium: false, desc: "Complete guide to plant and animal cells with diagrams." },
+        { id: 3, title: "Physics: Newton's Laws", duration: "15:45", views: "18K", premium: true, desc: "Understanding the 3 laws of motion with real examples." }
+      ],
+      fr: [
+        { id: 1, title: "Algèbre de Base - Équations Linéaires", duration: "12:34", views: "15K", premium: false, desc: "Apprenez à résoudre les équations linéaires étape par étape. Parfait pour BAC/BEPC." },
+        { id: 2, title: "Biologie: Structure de la Cellule", duration: "18:20", views: "22K", premium: false, desc: "Guide complet sur les cellules végétales et animales avec schémas." },
+        { id: 3, title: "Physique: Lois de Newton", duration: "15:45", views: "18K", premium: true, desc: "Comprendre les 3 lois du mouvement avec des exemples réels." }
+      ]
+    };
+
+    // Get videos for selected language
+    const videoList = videosByLang[lang] || videosByLang['en'];
+    const watchedVideos = JSON.parse(localStorage.getItem('afrikexams_watched_videos') || '[]');
+    document.getElementById('watched').textContent = watchedVideos.length;
+
+    // Render videos
+    const videosContainer = document.getElementById('videosList');
+    videoList.forEach(video => {
+      const isWatched = watchedVideos.includes(video.id);
+      const isPremium = video.premium;
+      
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.onclick = () => openVideo(video);
+      
+      card.innerHTML = `
+        <div class="video-thumb">
+          ▶️
+          <div class="play-icon">▶</div>
+        </div>
+        <div class="video-info">
+          <div class="video-title">${video.title}</div>
+          <div class="video-meta">
+            <span>⏱️ ${video.duration}</span>
+            <span>👁️ ${video.views}</span>
+            <span>${isWatched ? '✅ Watched' : '⏳ New'}</span>
+          </div>
+          <div class="video-desc">${video.desc}</div>
+          <div class="video-badge ${isPremium ? 'premium' : ''}">${isPremium ? '👑 Premium' : 'Free'}</div>
+        </div>
+      `;
+      videosContainer.appendChild(card);
+    });
+
+    function openVideo(video) {
+      if(video.premium) {
+        toast('Premium video - Go Premium to unlock');
+        return;
+      }
+      
+      // Mark as watched
+      if(!watchedVideos.includes(video.id)) {
+        watchedVideos.push(video.id);
+        localStorage.setItem('afrikexams_watched_videos', JSON.stringify(watchedVideos));
+        document.getElementById('watched').textContent = watchedVideos.length;
+      }
+      
+      // Show modal
+      document.getElementById('modalTitle').textContent = video.title;
+      document.getElementById('modalDesc').textContent = video.desc;
+      document.getElementById('videoModal').classList.add('active');
+    }
+
+    function closeModal(e) {
+      if(!e || e.target.id === 'videoModal') {
+        document.getElementById('videoModal').classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Daily Rewards</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: #f8fafc; color: #1e293b; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+   .container { padding: 20px 16px; }
+
+   .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+   .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+   .header-text h1 { font-size: 20px; font-weight: 700; }
+   .header-text p { font-size: 12px; color: #64748b; }
+
+   .balance-card { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #78350f; border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3); }
+   .balance-label { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+   .balance-amount { font-size: 32px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+   .balance-sub { font-size: 12px; margin-top: 8px; opacity: 0.9; }
+
+   .streak-banner { background: white; border-radius: 16px; padding: 16px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 16px; }
+   .streak-icon { font-size: 40px; }
+   .streak-info { flex: 1; }
+   .streak-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+   .streak-desc { font-size: 12px; color: #64748b; }
+
+   .calendar-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+   .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 24px; }
+   .day-box { aspect-ratio: 1; background: white; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); position: relative; }
+   .day-number { font-size: 11px; font-weight: 600; color: #94a3b8; }
+   .day-reward { font-size: 14px; margin-top: 2px; }
+   .day-box.claimed { background: #dcfce7; border: 2px solid #10b981; }
+   .day-box.today { background: #fef3c7; border: 2px solid #fbbf24; animation: pulse 2s infinite; }
+   .day-box.locked { opacity: 0.4; }
+   .checkmark { position: absolute; top: 4px; right: 4px; font-size: 12px; }
+
+   .claim-btn { width: 100%; background: #10b981; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 24px; }
+   .claim-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+   .rewards-shop { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+   .shop-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+   .shop-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; cursor: pointer; }
+   .shop-item:hover { background: #f8fafc; }
+   .shop-icon { font-size: 24px; }
+   .shop-info { flex: 1; }
+   .shop-name { font-size: 14px; font-weight: 600; }
+   .shop-cost { font-size: 12px; color: #f59e0b; font-weight: 700; }
+
+   .streak { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #78350f; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 8px 0; }
+   .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; cursor: pointer; }
+   .nav-item.active { color: #10b981; }
+   .nav-icon { font-size: 20px; }
+
+   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="streakBadge" class="streak">🔥 <span id="streakCount">0</span></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-text">
+        <h1>Daily Rewards</h1>
+        <p>Login daily to earn coins</p>
+      </div>
+    </div>
+
+    <div class="balance-card">
+      <div class="balance-label">Your Coins</div>
+      <div class="balance-amount">🪙 <span id="coinBalance">0</span></div>
+      <div class="balance-sub">Use coins to unlock premium content</div>
+    </div>
+
+    <div class="streak-banner">
+      <div class="streak-icon">🔥</div>
+      <div class="streak-info">
+        <div class="streak-title"><span id="currentStreak">0</span> Day Streak</div>
+        <div class="streak-desc">Keep it up! Next reward: <span id="nextReward">50</span> coins</div>
+      </div>
+    </div>
+
+    <div class="calendar-title">7-Day Reward Calendar</div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <button class="claim-btn" id="claimBtn" onclick="claimReward()">Claim Today's Reward</button>
+
+    <div class="rewards-shop">
+      <div class="shop-title">Redeem Coins</div>
+      <div class="shop-item" onclick="redeemItem(200, 'Premium Video Access')">
+        <div class="shop-icon">👑</div>
+        <div class="shop-info">
+          <div class="shop-name">Premium Video Access</div>
+          <div class="shop-cost">200 coins</div>
+        </div>
+      </div>
+      <div class="shop-item" onclick="redeemItem(500, 'Mock Exam Pack')">
+        <div class="shop-icon">📄</div>
+        <div class="shop-info">
+          <div class="shop-name">Mock Exam Pack</div>
+          <div class="shop-cost">500 coins</div>
+        </div>
+      </div>
+      <div class="shop-item" onclick="redeemItem(1000, '1 Week Premium')">
+        <div class="shop-icon">⭐</div>
+        <div class="shop-info">
+          <div class="shop-name">1 Week Premium</div>
+          <div class="shop-cost">1000 coins</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <div class="nav-icon">📝</div>
+      <div>Practice</div>
+    </a>
+    <a href="exams.html" class="nav-item">
+      <div class="nav-icon">📄</div>
+      <div>Exams</div>
+    </a>
+    <a href="#" class="nav-item" onclick="toast('Payment page coming soon')">
+      <div class="nav-icon">💳</div>
+      <div>Pay</div>
+    </a>
+    <a href="auth.html" class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    // Check if user picked country + language
+    const country = localStorage.getItem('afrikexams_country');
+    const lang = localStorage.getItem('afrikexams_lang');
+
+    if(!country ||!lang) {
+      alert('Please select country and language first');
+      window.location.href = 'index.html';
+    }
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // Reward system
+    const rewardSchedule = [50, 75, 100, 125, 150, 200, 300]; // Day 1 to Day 7
+
+    function loadRewards() {
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('afrikexams_last_claim');
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '0');
+      let coins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+      let claimedDays = JSON.parse(localStorage.getItem('afrikexams_claimed_days') || '[]');
+
+      // Update streak if new day
+      if(lastClaim!== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if(lastClaim === yesterday.toDateString()) {
+          streak += 1;
+        } else if(streak > 0 && lastClaim!== today) {
+          streak = 1; // Reset if missed a day
+        } else if(streak === 0) {
+          streak = 1;
+        }
+        localStorage.setItem('afrikexams_streak', streak);
+      }
+
+      // Cap streak at 7 for calendar
+      if(streak > 7) streak = 7;
+
+      // Update UI
+      document.getElementById('coinBalance').textContent = coins;
+      document.getElementById('streakCount').textContent = streak;
+      document.getElementById('currentStreak').textContent = streak;
+
+      const todayIndex = (streak - 1) % 7;
+      document.getElementById('nextReward').textContent = rewardSchedule[todayIndex];
+
+      // Render calendar
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+      for(let i = 0; i < 7; i++) {
+        const dayBox = document.createElement('div');
+        dayBox.className = 'day-box';
+
+        if(claimedDays.includes(i)) {
+          dayBox.classList.add('claimed');
+          dayBox.innerHTML = `<div class="day-number">Day ${i+1}</div><div class="day-reward">🪙${rewardSchedule[i]}</div><div class="checkmark">✓</div>`;
+        } else if(i === todayIndex && lastClaim!== today) {
+          dayBox.classList.add('today');
+          dayBox.innerHTML = `<div class="day-number">Day ${i+1}</div><div class="day-reward">🪙${rewardSchedule[i]}</div>`;
+        } else {
+          dayBox.classList.add('locked');
+          dayBox.innerHTML = `<div class="day-number">Day ${i+1}</div><div class="day-reward">🪙${rewardSchedule[i]}</div>`;
+        }
+        grid.appendChild(dayBox);
+      }
+
+      // Claim button state
+      const claimBtn = document.getElementById('claimBtn');
+      if(lastClaim === today) {
+        claimBtn.textContent = 'Already Claimed Today';
+        claimBtn.disabled = true;
+      } else {
+        claimBtn.textContent = `Claim ${rewardSchedule[todayIndex]} Coins`;
+        claimBtn.disabled = false;
+      }
+    }
+
+    function claimReward() {
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('afrikexams_last_claim');
+
+      if(lastClaim === today) {
+        toast('You already claimed today!');
+        return;
+      }
+
+      let streak = parseInt(localStorage.getItem('afrikexams_streak') || '1');
+      let coins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+      let claimedDays = JSON.parse(localStorage.getItem('afrikexams_claimed_days') || '[]');
+
+      const todayIndex = (streak - 1) % 7;
+      const reward = rewardSchedule[todayIndex];
+
+      coins += reward;
+      claimedDays.push(todayIndex);
+
+      localStorage.setItem('afrikexams_coins', coins);
+      localStorage.setItem('afrikexams_last_claim', today);
+      localStorage.setItem('afrikexams_claimed_days', JSON.stringify(claimedDays));
+
+      toast(`+${reward} coins claimed! 🔥`);
+      loadRewards();
+    }
+
+    function redeemItem(cost, name) {
+      let coins = parseInt(localStorage.getItem('afrikexams_coins') || '0');
+
+      if(coins < cost) {
+        toast(`Not enough coins! You need ${cost - coins} more.`);
+        return;
+      }
+
+      if(confirm(`Redeem ${name} for ${cost} coins?`)) {
+        coins -= cost;
+        localStorage.setItem('afrikexams_coins', coins);
+        toast(`${name} unlocked! ✅`);
+        loadRewards();
+      }
+    }
+
+    // Load on start
+    loadRewards();
+  </script>
+</body>
+</html>

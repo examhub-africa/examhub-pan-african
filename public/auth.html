@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfrikExams - Teacher Login</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+
+    body { background: linear-gradient(135deg, #10b981, #059669); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { max-width: 400px; width: 100%; }
+
+    .login-card { background: white; border-radius: 24px; padding: 32px 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo-icon { font-size: 48px; margin-bottom: 8px; }
+    .logo-text { font-size: 24px; font-weight: 800; color: #1e293b; }
+    .logo-text span { color: #10b981; }
+    .logo-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+    .form-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; text-align: center; }
+    .form-sub { font-size: 13px; color: #64748b; text-align: center; margin-bottom: 24px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; color: #334155; }
+    .form-input, .form-select { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; }
+    .form-input:focus, .form-select:focus { outline: none; border-color: #10b981; }
+
+    .btn-login { width: 100%; background: #10b981; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .btn-login:hover { background: #059669; }
+    .btn-login:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    .divider { text-align: center; margin: 20px 0; color: #94a3b8; font-size: 12px; position: relative; }
+    .divider:before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; z-index: -1; }
+    .divider span { background: white; padding: 0 12px; }
+
+    .demo-box { background: #f0fdf4; border: 2px dashed #10b981; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .demo-title { font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 8px; }
+    .demo-text { font-size: 11px; color: #15803d; line-height: 1.5; }
+    .demo-btn { width: 100%; background: white; color: #10b981; border: 2px solid #10b981; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+
+    .back-link { text-align: center; margin-top: 16px; }
+    .back-link a { color: #10b981; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+    .error { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; display: none; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+    <div class="login-card">
+      <div class="logo">
+        <div class="logo-icon">📚</div>
+        <div class="logo-text">Afrik<span>Exams</span></div>
+        <div class="logo-sub">Teacher Portal</div>
+      </div>
+
+      <div class="form-title">Teacher Login</div>
+      <div class="form-sub">Access your dashboard to upload content</div>
+
+      <div class="error" id="errorMsg"></div>
+
+      <div class="demo-box">
+        <div class="demo-title">Demo Account</div>
+        <div class="demo-text">
+          Email: teacher@demo.com<br>
+          Password: demo123<br>
+          Any email/password works for demo
+        </div>
+        <button class="demo-btn" onclick="fillDemo()">Use Demo Account</button>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="teacherName" placeholder="Mr. John Smith" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="email" placeholder="teacher@school.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="password" placeholder="Enter password" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <select class="form-select" id="subject" required>
+            <option value="">Select Subject</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="English">English</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <select class="form-select" id="country" required>
+            <option value="">Select Country</option>
+            <option value="Cameroon">Cameroon</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Ghana">Ghana</option>
+            <option value="Uganda">Uganda</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">Login to Dashboard</button>
+      </form>
+
+      <div class="divider"><span>or</span></div>
+
+      <div class="back-link">
+        <a href="index.html">← Back to Student Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    function showError(msg) {
+      const error = document.getElementById('errorMsg');
+      error.textContent = msg;
+      error.style.display = 'block';
+      setTimeout(() => error.style.display = 'none', 3000);
+    }
+
+    function fillDemo() {
+      document.getElementById('teacherName').value = 'Mr. John Smith';
+      document.getElementById('email').value = 'teacher@demo.com';
+      document.getElementById('password').value = 'demo123';
+      document.getElementById('subject').value = 'Mathematics';
+      document.getElementById('country').value = 'Cameroon';
+      toast('Demo account filled ✅');
+    }
+
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('teacherName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const subject = document.getElementById('subject').value;
+      const country = document.getElementById('country').value;
+
+      if(!name || !email || !password || !subject || !country) {
+        showError('Please fill all fields');
+        return;
+      }
+
+      // For demo: accept any email/password
+      // In production: call your backend API here
+
+      const loginBtn = document.getElementById('loginBtn');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      setTimeout(() => {
+        // Save teacher session to localStorage
+        localStorage.setItem('afrikexams_teacher_logged_in', 'true');
+        localStorage.setItem('afrikexams_teacher_name', name);
+        localStorage.setItem('afrikexams_teacher_email', email);
+        localStorage.setItem('afrikexams_teacher_subject', subject);
+        localStorage.setItem('afrikexams_teacher_country', country);
+        localStorage.setItem('afrikexams_lang', 'en'); // Default teacher language
+
+        toast('Login successful! Redirecting...');
+        
+        setTimeout(() => {
+          window.location.href = 'teacher-dashboard.html';
+        }, 500);
+      }, 800);
+    });
+
+    // If already logged in, redirect
+    if(localStorage.getItem('afrikexams_teacher_logged_in') === 'true') {
+      window.location.href = 'teacher-dashboard.html';
+    }
+  </script>
+</body>
+</html>
